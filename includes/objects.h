@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:04:22 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/13 17:20:29 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/13 18:10:36 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 typedef struct s_dongle
 {
-	pthread_mutex_t	mutex;
+	pthread_mutex_t	*mutex;
 	bool			taken;
 }	t_dongle;
 
@@ -38,12 +38,12 @@ typedef struct s_coder
 
 typedef struct s_objects
 {
-	size_t		count;
-	t_coder		**coders;
-	t_dongle	**dongles;
+	t_coder		*coders;
+	t_dongle	*dongles;
 }	t_objects;
 
+void		set_up_objects(t_args args, t_objects *objects);
 t_errcode	allocate_objects(t_args args, t_objects *objects);
-void		destroy_objects(void);
+void		destroy_objects(t_objects *objects);
 
 #endif
