@@ -1,28 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.h                                            :+:      :+:    :+:   */
+/*   objects.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/13 13:23:36 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/13 17:11:24 by ldecavel         ###   ########.fr       */
+/*   Created: 2026/03/13 16:09:00 by ldecavel          #+#    #+#             */
+/*   Updated: 2026/03/13 17:22:31 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_H
-# define ERROR_H
+#include "objects.h"
 
-#include <stdio.h>
-
-typedef int	t_errcode;
-
-typedef enum e_errcodes
+extern t_errcode	allocate_objects(t_args args, t_objects *objects)
 {
-	NO_ERROR,
-	MALLOC_ERROR,
-	ARG_COUNT_ERROR,
-	INVALID_ARG_ERROR,
-}	t_errcodes;
+	(void)args;
+	(void)objects;
+	return NO_ERROR;
+}
 
-#endif
+extern void	destroy_objects(void)
+{
+	return ;
+}

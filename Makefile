@@ -13,7 +13,8 @@ MAKEFLAGS += -j $$(nproc)
 
 # sources
 SRCS = main.c \
-	   parsing.c
+	   args.c \
+	   objects.c
 
 # objects
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)

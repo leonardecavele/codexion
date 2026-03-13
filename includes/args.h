@@ -1,23 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.h                                          :+:      :+:    :+:   */
+/*   args.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/13 12:14:03 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/13 14:45:18 by ldecavel         ###   ########.fr       */
+/*   Created: 2026/03/13 16:12:56 by ldecavel          #+#    #+#             */
+/*   Updated: 2026/03/13 17:22:20 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSING_H
-# define PARSING_H
+#ifndef ARGS_H
+# define ARGS_H
 
 # include <stdbool.h>
 # include <stdlib.h>
-# include <stdio.h>
 # include <string.h>
-# include <stddef.h>
 
 # include "error.h"
 
