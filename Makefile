@@ -15,7 +15,8 @@ MAKEFLAGS += -j $$(nproc)
 SRCS = main.c \
 	   args.c \
 	   objects.c \
-	   debug.c
+	   debug.c \
+	   error.c
 
 # objects
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)

@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:23:36 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/13 17:11:24 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 13:04:32 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ typedef enum e_errcodes
 	MALLOC_ERROR,
 	ARG_COUNT_ERROR,
 	INVALID_ARG_ERROR,
+	ZERO_CODERS_ERROR,
 }	t_errcodes;
+
+t_errcode	error_message(t_errcode errcode);
 
 #endif
