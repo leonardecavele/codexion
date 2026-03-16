@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:22:50 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 18:14:36 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 19:59:40 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,14 @@
 #include "objects.h"
 #include "debug.h"
 #include "session.h"
+#include "helpers.h"
 
 int	main(int ac, char **av)
 {
 	t_errcode	errcode;
 	t_args		args;
 	t_objects	objects;
+	t_session	session;
 
 	args = (t_args){0};
 	errcode = parse_args(ac - 1, av + 1, &args);
@@ -34,7 +36,8 @@ int	main(int ac, char **av)
 		set_up_objects(args, &objects);
 		debug_ids(args, objects);
 		debug_args(args);
-		errcode = start_session(&args, &objects);
+		session.start_ms = current_time_ms();
+		errcode = start_session(&args, &objects, &session);
 		if (errcode == NO_ERROR)
 			wait_session(&objects, args.noc);
 	}

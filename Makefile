@@ -17,7 +17,9 @@ SRCS = main.c \
 	   objects.c \
 	   debug.c \
 	   error.c \
-	   coder.c
+	   session.c \
+	   coder.c \
+	   helpers.c
 
 # objects
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)

@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:04:22 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 15:31:30 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 19:37:23 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,13 @@
 # include "args.h"
 # include "error.h"
 
+typedef struct s_session	t_session;
+
 typedef struct s_dongle
 {
 	size_t			id;
 	pthread_mutex_t	mutex;
-	bool			taken;
+	// 2 coders table priority queue
 }	t_dongle;
 
 typedef struct s_coder
@@ -35,6 +37,7 @@ typedef struct s_coder
 	t_dongle	*left;
 	t_dongle	*right;
 	size_t		compiled;
+	t_session	*session;
 }	t_coder;
 
 typedef struct s_objects

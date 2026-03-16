@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:56 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 15:38:17 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 19:30:37 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,11 @@
 # define CODER_H
 
 # include <pthread.h>
+# include <stdio.h>
 
-# include "args.h"
 # include "objects.h"
-# include "error.h"
+# include "helpers.h"
 
-t_errcode	start_session(t_args *args, t_objects *objects);
-void		wait_session(t_objects *objects, size_t n_threads);
+void	*handle_coder(void *arg);
 
 #endif

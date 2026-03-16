@@ -1,26 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   helpers.c                                          :+:      :+:    :+:   */
+/*   helpers.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/16 18:15:59 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 19:44:23 by ldecavel         ###   ########.fr       */
+/*   Created: 2026/03/16 18:18:32 by ldecavel          #+#    #+#             */
+/*   Updated: 2026/03/16 18:26:17 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "helpers.h"
+#ifndef HELPERS_H
+# define HELPERS_H
 
-extern size_t	current_time_ms(void)
-{
-	struct timeval	timeval;
+# include <sys/time.h>
+# include <stddef.h>
 
-	gettimeofday(&timeval, NULL);
-	return ((size_t)timeval.tv_sec * 1000 + (size_t)timeval.tv_usec / 1000);
-}
+size_t	current_time_ms(void);
+size_t	elapsed_time_ms(size_t start_ms);
 
-extern size_t	elapsed_time_ms(size_t start_ms)
-{
-	return ((size_t)(current_time_ms() - start_ms));
-}
+#endif

@@ -1,26 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   helpers.c                                          :+:      :+:    :+:   */
+/*   session.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/16 18:15:59 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 19:44:23 by ldecavel         ###   ########.fr       */
+/*   Created: 2026/03/16 15:12:56 by ldecavel          #+#    #+#             */
+/*   Updated: 2026/03/16 20:00:59 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "helpers.h"
+#ifndef SESSION_H
+# define SESSION_H
 
-extern size_t	current_time_ms(void)
+# include <pthread.h>
+
+# include "args.h"
+# include "error.h"
+# include "coder.h"
+
+typedef struct s_objects	t_objects;
+
+typedef struct s_session
 {
-	struct timeval	timeval;
+	size_t			start_ms;
+	pthread_mutex_t	print_mutex;
+}	t_session;
 
-	gettimeofday(&timeval, NULL);
-	return ((size_t)timeval.tv_sec * 1000 + (size_t)timeval.tv_usec / 1000);
-}
+t_errcode	start_session(t_args *args, t_objects *objects, t_session *session);
+void		wait_session(t_objects *objects, size_t n_threads);
 
-extern size_t	elapsed_time_ms(size_t start_ms)
-{
-	return ((size_t)(current_time_ms() - start_ms));
-}
+#endif
