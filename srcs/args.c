@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:27:31 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 13:35:03 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 15:07:08 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,13 @@
 static t_errcode	parse_int_arg(const char *s, size_t *arg)
 {
 	size_t	i;
-	size_t	value;
+	ssize_t	value;
 
 	i = -1;
 	while (s[++i])
 	{
+		if (i == 0 && (s[i] == '-' || s[i] == '+'))
+			continue ;
 		if (!(s[i] >= '0' && s[i] <= '9'))
 		{
 			fprintf(stderr, "invalid arg: '%s' (must be only digits)\n", s);
@@ -43,7 +45,10 @@ static t_errcode	parse_scheduler_arg(const char *s, bool *arg)
 	else if (!strcmp(s, "EDF") || !strcmp(s, "edf"))
 		*arg = EDF;
 	else
+	{
+		fprintf(stderr, "invalid scheduler: '%s' (must be FIFO or EDF)\n", s);
 		return (INVALID_ARG_ERROR);
+	}
 	return (NO_ERROR);
 }
 
@@ -54,7 +59,12 @@ static t_errcode	parse_debug_arg(const char *s, bool *arg, int ac)
 	if (!strcmp(s, "DEBUG") || !strcmp(s, "debug"))
 		*arg = true;
 	else
+	{
+		fprintf(
+			stderr, "invalid debug flag: '%s' (must be empty or DEBUG)\n", s
+		);
 		return (INVALID_ARG_ERROR);
+	}
 	return (NO_ERROR);
 }
 

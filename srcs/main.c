@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:22:50 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 13:05:12 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 14:51:27 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,15 @@
 #include "objects.h"
 #include "debug.h"
 
+#include <pthread.h>
+
 static void	start_session(t_args *args, t_objects *objects)
 {
+	//size_t	i;
+
+	//i = -1;
+	//while (++i < args.noc)
+	//	pthread_create(objects->coder[i].thread, NULL, PLACE_HOLDER_FUNC);
 	(void)args;
 	(void)objects;
 }
