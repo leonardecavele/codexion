@@ -6,14 +6,12 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 20:03:00 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 20:04:44 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "session.h"
 #include "objects.h"
-
-#include <unistd.h>
 
 extern t_errcode	start_session(
 	t_args *args, t_objects *objects, t_session *session
