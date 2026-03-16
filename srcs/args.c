@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:27:31 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 12:07:26 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 12:38:10 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,26 @@ static t_errcode	parse_int_arg(const char *s, size_t *arg)
 	return (NO_ERROR);
 }
 
+static t_errcode	parse_scheduler_arg(const char *s, bool *arg)
+{
+	if (!strcmp(s, "FIFO"))
+		*arg = FIFO;
+	else if (!strcmp(s, "EDF"))
+		*arg = EDF;
+	else
+		return (INVALID_ARG_ERROR);
+	return (NO_ERROR);
+}
+
+static t_errcode	parse_debug_arg(const char *s, bool *arg)
+{
+	if (!strcmp(s, "DEBUG") || !strcmp(s, "debug"))
+		*arg = true;
+	else
+		return (INVALID_ARG_ERROR);
+	return (NO_ERROR);
+}
+
 extern t_errcode	parse_args(int ac, char **av, t_args *args)
 {
 	t_errcode	errcode;
@@ -49,17 +69,9 @@ extern t_errcode	parse_args(int ac, char **av, t_args *args)
 	errcode |= parse_int_arg(*av++, &args->ttr);
 	errcode |= parse_int_arg(*av++, &args->nocr);
 	errcode |= parse_int_arg(*av++, &args->dc);
-	if (!strcmp(*av, "FIFO"))
-		args->scheduler = FIFO;
-	else if (!strcmp(*av, "EDF"))
-		args->scheduler = EDF;
-	else
-	{
-		fprintf(stderr, "invalid arg: '%s' (unknown scheduler)\n", *av);
-		return (INVALID_ARG_ERROR);
-	}
+	errcode |= parse_scheduler_arg(*av++, &args->scheduler);
 	if (ac == 9)
-		errcode |= parse_int_arg(*av + 1, &args--
+		errcode |= parse_debug_arg(*av, &args->debug);
 	if (errcode != NO_ERROR)
 		return (INVALID_ARG_ERROR);
 	return (NO_ERROR);

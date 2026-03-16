@@ -6,13 +6,14 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:22:50 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 11:59:07 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 12:49:12 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "error.h"
 #include "args.h"
 #include "objects.h"
+#include "debug.h"
 
 int	main(int ac, char **av)
 {
@@ -20,6 +21,7 @@ int	main(int ac, char **av)
 	t_args		args;
 	t_objects	objects;
 
+	args = (t_args){0};
 	errcode = parse_args(ac - 1, av + 1, &args);
 	if (errcode != NO_ERROR)
 		return (errcode);
@@ -32,6 +34,8 @@ int	main(int ac, char **av)
 	if (errcode == NO_ERROR)
 	{
 		set_up_objects(args, &objects);
+		debug_ids(args, objects);
+		debug_args(args);
 		// run proram and stuff
 	}
 	destroy_objects(&objects);

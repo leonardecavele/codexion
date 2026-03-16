@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:04:22 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/13 18:10:36 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 11:46:53 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@
 
 typedef struct s_dongle
 {
-	pthread_mutex_t	*mutex;
+	size_t			id;
+	pthread_mutex_t	mutex;
 	bool			taken;
 }	t_dongle;
 

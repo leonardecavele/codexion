@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:12:56 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/13 17:22:20 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 12:22:18 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_args
 	size_t	nocr; // number of compiles required
 	size_t	dc; // dongle cooldown
 	bool	scheduler;
+	bool	debug;
 }	t_args;
 
 t_errcode	parse_args(int ac, char **av, t_args *args);
