@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:22:50 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 14:51:27 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 15:29:02 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,7 @@
 #include "args.h"
 #include "objects.h"
 #include "debug.h"
-
-#include <pthread.h>
-
-static void	start_session(t_args *args, t_objects *objects)
-{
-	//size_t	i;
-
-	//i = -1;
-	//while (++i < args.noc)
-	//	pthread_create(objects->coder[i].thread, NULL, PLACE_HOLDER_FUNC);
-	(void)args;
-	(void)objects;
-}
+#include "coder.h"
 
 int	main(int ac, char **av)
 {
@@ -46,7 +34,9 @@ int	main(int ac, char **av)
 		set_up_objects(args, &objects);
 		debug_ids(args, objects);
 		debug_args(args);
-		start_session(&args, &objects);
+		errcode = start_session(&args, &objects);
+		if (errcode == NO_ERROR)
+			wait_session(&args, &objects, args->noc);
 	}
 	destroy_objects(&objects);
 	return (error_message(errcode));
