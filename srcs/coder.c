@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 15:34:43 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 15:38:08 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	*coder_routine(void *arg)
 	return (NULL);
 }
 
-static t_errcode	start_session(t_args *args, t_objects *objects)
+extern t_errcode	start_session(t_args *args, t_objects *objects)
 {
 	size_t	i;
 
@@ -37,14 +37,14 @@ static t_errcode	start_session(t_args *args, t_objects *objects)
 			) != 0
 		)
 		{
-			wait_session(args, objects, i);
+			wait_session(objects, i);
 			return (THREAD_CREATE_ERROR);
 		}
 	}
 	return (NO_ERROR);
 }
 
-extern void	wait_session(t_args *args, t_objects *objects, size_t n_threads)
+extern void	wait_session(t_objects *objects, size_t n_threads)
 {
 	size_t	i;
 

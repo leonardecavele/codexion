@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:22:50 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 15:29:02 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 15:38:04 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	main(int ac, char **av)
 		debug_args(args);
 		errcode = start_session(&args, &objects);
 		if (errcode == NO_ERROR)
-			wait_session(&args, &objects, args->noc);
+			wait_session(&objects, args.noc);
 	}
 	destroy_objects(&objects);
 	return (error_message(errcode));
