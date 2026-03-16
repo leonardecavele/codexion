@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:27:31 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 15:07:08 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 15:33:32 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static t_errcode	parse_debug_arg(const char *s, bool *arg, int ac)
 	{
 		fprintf(
 			stderr, "invalid debug flag: '%s' (must be empty or DEBUG)\n", s
-		);
+			);
 		return (INVALID_ARG_ERROR);
 	}
 	return (NO_ERROR);

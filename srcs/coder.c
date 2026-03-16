@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 15:30:03 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 15:34:43 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static t_errcode	start_session(t_args *args, t_objects *objects)
 
 	i = -1;
 	while (++i < args->noc)
+	{
 		if (
 			pthread_create(
 				&objects->coders[i].thread,
@@ -39,6 +40,7 @@ static t_errcode	start_session(t_args *args, t_objects *objects)
 			wait_session(args, objects, i);
 			return (THREAD_CREATE_ERROR);
 		}
+	}
 	return (NO_ERROR);
 }
 

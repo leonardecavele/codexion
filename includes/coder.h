@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   debug.h                                            :+:      :+:    :+:   */
+/*   coder.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/16 12:21:53 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 15:31:38 by ldecavel         ###   ########.fr       */
+/*   Created: 2026/03/16 15:12:56 by ldecavel          #+#    #+#             */
+/*   Updated: 2026/03/16 15:31:46 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DEBUG_H
-# define DEBUG_H
+#ifndef CODER_H
+# define CODER_H
 
-# include <stdio.h>
+# include <pthread.h>
 
 # include "args.h"
 # include "objects.h"
 
-void	debug_ids(t_args args, t_objects objects);
-void	debug_args(t_args args);
+void	start_session(t_args *args, t_objects *objects);
 
 #endif

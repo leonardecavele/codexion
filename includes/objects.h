@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:04:22 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 11:46:53 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 15:31:30 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # include <string.h>
 # include <stddef.h>
 
-#include "args.h"
-#include "error.h"
+# include "args.h"
+# include "error.h"
 
 typedef struct s_dongle
 {

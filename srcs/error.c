@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 13:01:36 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 13:32:27 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 15:32:56 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	usage(void)
 		"  dongle_cooldown             dongle cooldown (ms)\n"
 		"  scheduler                   FIFO|EDF\n"
 		"  [debug|DEBUG]               enable extra debug logs\n"
-	);
+		);
 }
 
 extern t_errcode	error_message(t_errcode errcode)
