@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:09:00 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/13 18:08:28 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 11:57:45 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,18 @@
 
 extern void	set_up_objects(t_args args, t_objects *objects)
 {
-	(void)args;
-	(void)objects;
+	size_t	i;
+
+	i = -1;
+	while (++i < args.noc)
+	{
+		objects->coders[i].left = &objects->dongles[
+			(i + args.noc - 1) % args.noc
+		];
+		objects->coders[i].right = &objects->dongles[i % args.noc];
+		objects->dongles[i].id = i + 1;
+		objects->coders[i].id = i + 1;
+	}
 	return ;
 }
 
