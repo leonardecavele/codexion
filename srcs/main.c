@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:22:50 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 15:38:04 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/16 18:14:36 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "args.h"
 #include "objects.h"
 #include "debug.h"
-#include "coder.h"
+#include "session.h"
 
 int	main(int ac, char **av)
 {
