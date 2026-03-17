@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:56 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 19:30:37 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/17 12:35:36 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <pthread.h>
 # include <stdio.h>
+# include <unistd.h>
 
 # include "objects.h"
 # include "helpers.h"
