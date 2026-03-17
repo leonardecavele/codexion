@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 17:40:19 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/17 18:05:54 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/17 18:59:32 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,12 @@ static void	take_dongles(
 )
 {
 	// check last time
-	// check dongle->last_used
+	// check dongle->last_use
+	while (
+		!((elapsed_time_ms(dongle_1->last_use) >= coder->args->dc
+		 && elapsed_time_ms(dongle_2->last_use) >= coder->args->dc))
+	)
+		usleep(100);
 	pthread_mutex_lock(&coder->session->dongles_mutex);
 	while (!(dongle_1->available && dongle_2->available))
 		pthread_cond_wait(
@@ -63,8 +68,8 @@ extern void	*handle_coder(void *arg)
 			take_dongles(coder, coder->right, coder->left);
 		exec_activity(start_ms, "is compiling", coder, coder->args->ttc);
 		// coder last compile
-		coder->left->last_used = current_time_ms();
-		coder->right->last_used = current_time_ms();
+		coder->left->last_use = current_time_ms();
+		coder->right->last_use = current_time_ms();
 
 		pthread_mutex_lock(&coder->session->dongles_mutex);
 		coder->left->available = true;

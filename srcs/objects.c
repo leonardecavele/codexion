@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:09:00 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/17 16:30:50 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/17 18:37:30 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,9 @@ extern void	set_up_objects(t_args *args, t_objects *objs, t_session *session)
 			(i + args->noc - 1) % args->noc
 		];
 		objs->dongles[i].available = true;
-		objs->coders[i].right = &objs->dongles[i % args->noc];
 		objs->dongles[i].id = i + 1;
+		objs->dongles[i].last_use = 0;
+		objs->coders[i].right = &objs->dongles[i % args->noc];
 		objs->coders[i].id = i + 1;
 		objs->coders[i].args = args;
 		objs->coders[i].session = session;
