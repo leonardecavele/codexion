@@ -6,20 +6,20 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/17 13:35:34 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/17 13:47:41 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "session.h"
 #include "objects.h"
 
-extern t_errcode	start_session(
-	t_args *args, t_objects *objects, t_session *session
-)
+extern t_errcode	start_session(t_args *args, t_session *session)
 {
 	size_t		i;
+	t_objects	*objects;
 
 	i = -1;
+	objects = &session->objects;
 	if (pthread_create(&session->monitor, NULL, handle_monitor, &objects) != 0)
 		return (THREAD_CREATE_ERROR);
 	while (++i < args->noc)
@@ -30,18 +30,19 @@ extern t_errcode	start_session(
 				handle_coder, &objects->coders[i]
 			) != 0)
 		{
-			wait_session(objects, i);
+			wait_session(i, session);
 			return (THREAD_CREATE_ERROR);
 		}
 	}
 	return (NO_ERROR);
 }
 
-extern void	wait_session(t_objects *objects, size_t n_threads)
+extern void	wait_session(size_t n_threads, t_session *session)
 {
 	size_t	i;
 
 	i = -1;
 	while (++i < n_threads)
-		pthread_join(objects->coders[i].thread, NULL);
+		pthread_join(session->objects.coders[i].thread, NULL);
+	pthread_join(session->monitor, NULL);
 }

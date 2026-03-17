@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:22:50 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 19:59:40 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/17 13:46:09 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	main(int ac, char **av)
 {
 	t_errcode	errcode;
 	t_args		args;
-	t_objects	objects;
 	t_session	session;
 
 	args = (t_args){0};
@@ -30,17 +29,17 @@ int	main(int ac, char **av)
 		return (error_message(errcode));
 	if (args.noc == 0)
 		return (error_message(INVALID_ARG_ERROR));
-	errcode = allocate_objects(args, &objects);
+	errcode = allocate_objects(args, &session.objects);
 	if (errcode == NO_ERROR)
 	{
-		set_up_objects(args, &objects);
-		debug_ids(args, objects);
+		set_up_objects(args, &session.objects);
+		debug_ids(args, session.objects);
 		debug_args(args);
 		session.start_ms = current_time_ms();
-		errcode = start_session(&args, &objects, &session);
+		errcode = start_session(&args, &session);
 		if (errcode == NO_ERROR)
-			wait_session(&objects, args.noc);
+			wait_session(args.noc, &session);
 	}
-	destroy_objects(&objects);
+	destroy_objects(&session.objects);
 	return (error_message(errcode));
 }
