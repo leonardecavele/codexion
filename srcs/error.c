@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 13:01:36 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 15:32:56 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/17 16:06:56 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,14 @@ extern t_errcode	error_message(t_errcode errcode)
 	if (errcode == NO_ERROR)
 		;
 	else if (errcode == MALLOC_ERROR)
-		fprintf(stderr, "cannot allocate memory, malloc failed");
+		fprintf(stderr, "cannot allocate memory, malloc failed\n");
 	else if (errcode == ARG_COUNT_ERROR)
 		usage();
 	else if (errcode == INVALID_ARG_ERROR)
 		usage();
 	else if (errcode == ZERO_CODERS_ERROR)
-		fprintf(stderr, "invalid number of coders: (can't process 0 coder)");
+		fprintf(stderr, "invalid number of coders: (can't process 0 coder)\n");
+	else if (errcode == THREAD_CREATE_ERROR)
+		fprintf(stderr, "cannot create thread\n");
 	return (errcode);
 }

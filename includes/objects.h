@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:04:22 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/17 14:21:59 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/17 14:51:05 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ typedef struct s_coder
 	pthread_t	thread;
 	t_dongle	*left;
 	t_dongle	*right;
-	size_t		compiled;
 	t_session	*session;
 	t_args		*args;
 }	t_coder;

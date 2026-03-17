@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 17:40:19 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/17 13:58:35 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/17 15:13:30 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static void	take_dongles(
 	t_coder *coder, pthread_mutex_t *dongle_1, pthread_mutex_t *dongle_2
 )
 {
+	// check last time
 	pthread_mutex_lock(dongle_1);
 	exec_activity(coder->session->start_ms, "has taken a dongle", coder, 0);
 	pthread_mutex_lock(dongle_2);
@@ -49,11 +50,13 @@ extern void	*handle_coder(void *arg)
 	start_ms = coder->session->start_ms;
 	while (++i < coder->args->nocr)
 	{
-		if (coder->id % 2 == 0)
+		if (i == 0 && coder->id % 2 == 0)
 			take_dongles(coder, &coder->left->mutex, &coder->right->mutex);
 		else
 			take_dongles(coder, &coder->right->mutex, &coder->left->mutex);
 		exec_activity(start_ms, "is compiling", coder, coder->args->ttc);
+		// update last_compile
+		// save last time dongle use time
 		pthread_mutex_unlock(&coder->left->mutex);
 		pthread_mutex_unlock(&coder->right->mutex);
 		exec_activity(start_ms, "is debugging", coder, coder->args->ttd);

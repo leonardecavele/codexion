@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:22:50 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/17 14:29:27 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/17 16:07:33 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int	main(int ac, char **av)
 	if (errcode != NO_ERROR)
 		return (error_message(errcode));
 	if (args.noc == 0)
-		return (error_message(INVALID_ARG_ERROR));
+		return (error_message(ZERO_CODERS_ERROR));
+	&session.objects = (t_objects){0};
 	errcode = allocate_objects(args, &session.objects);
 	if (errcode == NO_ERROR)
 	{
