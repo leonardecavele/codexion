@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:04:22 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/17 14:51:05 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/17 17:54:08 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ typedef struct s_session	t_session;
 typedef struct s_dongle
 {
 	size_t			id;
-	pthread_mutex_t	mutex;
+	size_t			last_used;
+	bool			available;
 	// 2 coders table priority queue
 }	t_dongle;
 

@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 17:40:19 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/17 15:13:30 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/17 18:05:54 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,21 @@ static void	exec_activity(
 }
 
 static void	take_dongles(
-	t_coder *coder, pthread_mutex_t *dongle_1, pthread_mutex_t *dongle_2
+	t_coder *coder, t_dongle *dongle_1, t_dongle *dongle_2
 )
 {
 	// check last time
-	pthread_mutex_lock(dongle_1);
+	// check dongle->last_used
+	pthread_mutex_lock(&coder->session->dongles_mutex);
+	while (!(dongle_1->available && dongle_2->available))
+		pthread_cond_wait(
+			&coder->session->dongles_cond, &coder->session->dongles_mutex
+		);
+	dongle_1->available = false;
+	dongle_2->available = false;
 	exec_activity(coder->session->start_ms, "has taken a dongle", coder, 0);
-	pthread_mutex_lock(dongle_2);
 	exec_activity(coder->session->start_ms, "has taken a dongle", coder, 0);
+	pthread_mutex_unlock(&coder->session->dongles_mutex);
 }
 
 extern void	*handle_coder(void *arg)
@@ -50,15 +57,21 @@ extern void	*handle_coder(void *arg)
 	start_ms = coder->session->start_ms;
 	while (++i < coder->args->nocr)
 	{
-		if (i == 0 && coder->id % 2 == 0)
-			take_dongles(coder, &coder->left->mutex, &coder->right->mutex);
+		if (coder->id % 2 == 0)
+			take_dongles(coder, coder->left, coder->right);
 		else
-			take_dongles(coder, &coder->right->mutex, &coder->left->mutex);
+			take_dongles(coder, coder->right, coder->left);
 		exec_activity(start_ms, "is compiling", coder, coder->args->ttc);
-		// update last_compile
-		// save last time dongle use time
-		pthread_mutex_unlock(&coder->left->mutex);
-		pthread_mutex_unlock(&coder->right->mutex);
+		// coder last compile
+		coder->left->last_used = current_time_ms();
+		coder->right->last_used = current_time_ms();
+
+		pthread_mutex_lock(&coder->session->dongles_mutex);
+		coder->left->available = true;
+		coder->right->available = true;
+		pthread_cond_broadcast(&coder->session->dongles_cond);
+		pthread_mutex_unlock(&coder->session->dongles_mutex);
+
 		exec_activity(start_ms, "is debugging", coder, coder->args->ttd);
 		exec_activity(start_ms, "is refactoring", coder, coder->args->ttr);
 	}

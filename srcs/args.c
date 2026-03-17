@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:27:31 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/17 16:04:55 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/17 17:03:52 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static t_errcode	parse_int_arg(const char *s, size_t *arg)
 		}
 	}
 	value = atoi(s);
-	if (value < 0 || !*s)
+	if (value < 0 || !*s || (strlen(s) == 1 && (*s == '+' || *s == '-')))
 	{
 		fprintf(stderr, "invalid arg: '%s' (must be positive integer)\n", s);
 		return (INVALID_ARG_ERROR);
