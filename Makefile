@@ -8,7 +8,7 @@ BUILD_DIR = build
 
 # flags
 CC = cc
-CFLAGS = -MMD -MP -Wall -Wextra -Werror -I $(INC_DIR)
+CFLAGS = -MMD -MP -Wall -Wextra -Werror -I $(INC_DIR) -pthread
 MAKEFLAGS += -j $$(nproc)
 
 # sources

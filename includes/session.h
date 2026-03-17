@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:56 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/17 13:33:24 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/17 14:25:01 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,10 @@ typedef struct s_session
 	size_t			start_ms;
 	pthread_mutex_t	print_mutex;
 	pthread_t		monitor;
+	t_objects		objects;
 }	t_session;
 
-t_errcode	start_session(t_args *args, t_objects *objects, t_session *session);
-void		wait_session(t_objects *objects, size_t n_threads);
+t_errcode	start_session(t_args *args, t_session *session);
+void		wait_session(size_t n_threads, t_session *session);
 
 #endif

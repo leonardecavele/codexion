@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:04:22 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/17 12:38:24 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/17 14:21:59 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdio.h>
 # include <string.h>
 # include <stddef.h>
+# include <pthread.h>
 
 # include "args.h"
 # include "error.h"
@@ -47,8 +48,8 @@ typedef struct s_objects
 	t_dongle	*dongles;
 }	t_objects;
 
-void		set_up_objects(t_args args, t_objects *objects);
-t_errcode	allocate_objects(t_args args, t_objects *objects);
-void		destroy_objects(t_objects *objects);
+void		set_up_objects(t_args *args, t_objects *objs, t_session *session);
+t_errcode	allocate_objects(t_args args, t_objects *objs);
+void		destroy_objects(t_objects *objs);
 
 #endif
