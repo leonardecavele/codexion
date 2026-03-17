@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 17:40:19 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/17 13:10:07 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/17 13:32:55 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ static void	exec_activity(
 	fprintf(
 		stdout, "%zu %zu %s\n", elapsed_time_ms(start_ms), coder->id, activity
 		);
-	usleep(time_to_wait * 1000);
 	pthread_mutex_unlock(&coder->session->print_mutex);
+	usleep(time_to_wait * 1000);
 }
 
 static void	take_dongles(
@@ -59,6 +59,5 @@ extern void	*handle_coder(void *arg)
 		exec_activity(start_ms, "is debugging", coder, coder->args->ttd);
 		exec_activity(start_ms, "is refactoring", coder, coder->args->ttr);
 	}
-
 	return (NULL);
 }

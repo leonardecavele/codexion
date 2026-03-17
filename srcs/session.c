@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 20:04:44 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/17 13:35:34 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ extern t_errcode	start_session(
 	size_t		i;
 
 	i = -1;
+	if (pthread_create(&session->monitor, NULL, handle_monitor, &objects) != 0)
+		return (THREAD_CREATE_ERROR);
 	while (++i < args->noc)
 	{
 		objects->coders[i].session = session;
