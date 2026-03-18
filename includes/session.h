@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:56 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 17:55:00 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 19:10:53 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,27 @@
 typedef struct s_objects	t_objects;
 typedef struct s_args		t_args;
 
+typedef enum e_status
+{
+	WORKING,
+	OVER
+}	t_status;
+
 typedef struct s_session
 {
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	dongles_mutex;
-	pthread_mutex_t	killed_mutex;
+	pthread_mutex_t	over_mutex;
+	pthread_mutex_t	ready_mutex;
 	pthread_cond_t	dongles_cond;
 	pthread_t		monitor;
 	size_t			start_ms;
+	bool			over;
 	bool			ready;
-	bool			killed;
 	t_objects		objects;
 }	t_session;
 
 t_errcode	handle_session(t_args *args, t_session *session);
+t_status	wait_start_session(t_session *session);
 
 #endif

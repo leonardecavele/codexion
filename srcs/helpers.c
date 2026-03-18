@@ -6,13 +6,14 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 18:15:59 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 18:05:27 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 19:11:31 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/time.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "objects.h"
 #include "session.h"
@@ -31,7 +32,7 @@ extern size_t	elapsed_time_ms(size_t start_ms)
 	return ((size_t)(current_time_ms() - start_ms));
 }
 
-extern t_burnout_status	log_activity(
+extern t_status	log_activity(
 	size_t start_ms, char *activity, t_coder *coder, size_t time_to_wait
 )
 {
@@ -44,13 +45,13 @@ extern t_burnout_status	log_activity(
 	elapsed = 0;
 	while (elapsed < time_to_wait)
 	{
-		pthread_mutex_lock(&coder->session->killed_mutex);
-		if (coder->session->killed)
+		pthread_mutex_lock(&coder->session->over_mutex);
+		if (coder->session->over)
 		{
-			pthread_mutex_unlock(&coder->session->killed_mutex);
+			pthread_mutex_unlock(&coder->session->over_mutex);
 			return (OVER);
 		}
-		pthread_mutex_unlock(&coder->session->killed_mutex);
+		pthread_mutex_unlock(&coder->session->over_mutex);
 		chunk = time_to_wait - elapsed;
 		if (chunk > 1)
 			chunk = 1;
@@ -58,4 +59,18 @@ extern t_burnout_status	log_activity(
 		elapsed += chunk;
 	}
 	return (WORKING);
+}
+
+extern bool	integer_thread_cmp(
+	pthread_mutex_t *mutex, size_t mutex_value, size_t value
+)
+{
+	pthread_mutex_lock(mutex);
+	if (mutex_value == value)
+	{
+		return (true);
+		pthread_mutex_unlock(mutex);
+	}
+	pthread_mutex_unlock(mutex);
+	return (false);
 }

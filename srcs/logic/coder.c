@@ -6,12 +6,12 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 17:40:19 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 17:40:08 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 19:06:54 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include <pthread.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 #include "objects.h"
 #include "args.h"
@@ -25,7 +25,7 @@
 // est-ce que je peux prendre tel dongle
 // -> verifie la queue
 
-static t_burnout_status	take_dongles(
+static t_status	take_dongles(
 	t_coder *coder, t_dongle *dongle_1, t_dongle *dongle_2, t_session *session
 )
 {
@@ -34,14 +34,14 @@ static t_burnout_status	take_dongles(
 		pthread_mutex_lock(&session->dongles_mutex);
 		while (!(dongle_1->available && dongle_2->available))
 		{
-			pthread_mutex_lock(&session->killed_mutex);
-			if (session->killed)
+			pthread_mutex_lock(&session->over_mutex);
+			if (session->over)
 			{
-				pthread_mutex_unlock(&session->killed_mutex);
+				pthread_mutex_unlock(&session->over_mutex);
 				pthread_mutex_unlock(&session->dongles_mutex);
 				return (OVER);
 			}
-			pthread_mutex_unlock(&session->killed_mutex);
+			pthread_mutex_unlock(&session->over_mutex);
 			pthread_cond_wait(&session->dongles_cond, &session->dongles_mutex);
 		}
 		if (elapsed_time_ms(dongle_1->last_use) >= coder->args->dc
@@ -53,13 +53,13 @@ static t_burnout_status	take_dongles(
 			break ;
 		}
 		pthread_mutex_unlock(&session->dongles_mutex);
-		pthread_mutex_lock(&session->killed_mutex);
-		if (session->killed)
+		pthread_mutex_lock(&session->over_mutex);
+		if (session->over)
 		{
-			pthread_mutex_unlock(&session->killed_mutex);
+			pthread_mutex_unlock(&session->over_mutex);
 			return (OVER);
 		}
-		pthread_mutex_unlock(&session->killed_mutex);
+		pthread_mutex_unlock(&session->over_mutex);
 		usleep(100);
 	}
 	if (log_activity(session->start_ms, "has taken a dongle", coder, 0)
@@ -68,7 +68,7 @@ static t_burnout_status	take_dongles(
 	return (WORKING);
 }
 
-static t_burnout_status	routine(t_coder *coder, t_args *args, t_session *session)
+static t_status	routine(t_coder *coder, t_args *args, t_session *session)
 {
 	pthread_mutex_lock(&coder->last_compile_mutex);
 	coder->last_compile = current_time_ms();
@@ -91,20 +91,12 @@ static t_burnout_status	routine(t_coder *coder, t_args *args, t_session *session
 extern void	*handle_coder(void *arg)
 {
 	t_coder				*coder;
-	t_burnout_status	status;
+	t_status			status;
 	size_t				i;
 
 	coder = (t_coder *)arg;
-	while (!usleep(100) && !coder->session->ready)
-	{
-		pthread_mutex_lock(&coder->session->killed_mutex);
-		if (coder->session->killed)
-		{
-			pthread_mutex_unlock(&coder->session->killed_mutex);
+	if (wait_start_session(coder->session) == OVER)
 			return (NULL);
-		}
-		pthread_mutex_unlock(&coder->session->killed_mutex);
-	}
 	i = -1;
 	status = WORKING;
 	while (++i < coder->args->nocr)

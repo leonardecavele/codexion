@@ -17,10 +17,10 @@ SRCS = main.c \
 	   objects.c \
 	   debug.c \
 	   error.c \
-	   session.c \
-	   coder.c \
-	   helpers.c \
-	   monitor.c
+	   logic/session.c \
+	   logic/coder.c \
+	   logic/monitor.c \
+	   helpers.c
 
 # objects
 OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o)

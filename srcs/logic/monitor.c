@@ -6,18 +6,19 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 13:15:46 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 17:43:45 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 19:11:09 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
+#include <stdbool.h>
 
-#include "helpers.h"
 #include "objects.h"
 #include "session.h"
+#include "helpers.h"
 #include "args.h"
 
-static t_burnout_status	check_burnout(t_objects *objects, t_args *args)
+static t_status	check_burnout(t_objects *objects, t_args *args)
 {
 	size_t	i;
 
@@ -70,16 +71,8 @@ extern void	*handle_monitor(void *arg)
 	objects = (t_objects *)arg;
 	args = objects->coders[0].args;
 	session = objects->coders[0].session;
-	while (!usleep(100) && !session->ready)
-	{
-		pthread_mutex_lock(&session->killed_mutex);
-		if (session->killed)
-		{
-			pthread_mutex_unlock(&session->killed_mutex);
-			return (NULL);
-		}
-		pthread_mutex_unlock(&session->killed_mutex);
-	}
+	if (wait_start_session(session) == OVER)
+		return (NULL);
 	while (1)
 	{
 		burnout_id = check_burnout(objects, args);
@@ -87,9 +80,9 @@ extern void	*handle_monitor(void *arg)
 			|| check_over(objects, args) == true))
 		{
 			pthread_mutex_lock(&session->dongles_mutex);
-			pthread_mutex_lock(&session->killed_mutex);
-			session->killed = true;
-			pthread_mutex_unlock(&session->killed_mutex);
+			pthread_mutex_lock(&session->over_mutex);
+			session->over = true;
+			pthread_mutex_unlock(&session->over_mutex);
 			pthread_cond_broadcast(&session->dongles_cond);
 			pthread_mutex_unlock(&session->dongles_mutex);
 			log_activity(
