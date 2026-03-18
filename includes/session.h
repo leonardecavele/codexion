@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:56 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/17 18:01:47 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 14:16:31 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ typedef struct s_session
 	pthread_cond_t	dongles_cond;
 	pthread_t		monitor;
 	t_objects		objects;
+	bool			ready;
+	bool			killed;
 }	t_session;
 
 t_errcode	start_session(t_args *args, t_session *session);

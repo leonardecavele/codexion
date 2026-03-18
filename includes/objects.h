@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:04:22 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/17 18:36:34 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 11:26:29 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,14 @@ typedef struct s_dongle
 
 typedef struct s_coder
 {
-	size_t		id;
-	pthread_t	thread;
-	t_dongle	*left;
-	t_dongle	*right;
-	t_session	*session;
-	t_args		*args;
+	size_t			id;
+	pthread_t		thread;
+	t_dongle		*left;
+	t_dongle		*right;
+	t_session		*session;
+	t_args			*args;
+	pthread_mutex_t	last_compile_mutex;
+	size_t			last_compile;
 }	t_coder;
 
 typedef struct s_objects
