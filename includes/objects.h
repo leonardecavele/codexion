@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:04:22 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 20:20:03 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 22:53:07 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,14 @@
 
 typedef struct s_session	t_session;
 typedef struct s_args		t_args;
+typedef struct s_coder		t_coder;
 
 typedef struct s_dongle
 {
 	size_t			id;
 	size_t			last_use;
 	bool			available;
-	// 2 coders table priority queue
+	t_coder			*heap[2];
 }	t_dongle;
 
 typedef struct s_coder
@@ -39,6 +40,8 @@ typedef struct s_coder
 	size_t			last_compile;
 	pthread_mutex_t	over_mutex;
 	bool			over;
+	bool			waiting;
+	size_t			request_seq;
 	t_session		*session;
 	t_args			*args;
 }	t_coder;

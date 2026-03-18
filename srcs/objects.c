@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:09:00 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 21:56:21 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 22:34:44 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,20 @@ extern void	set_up_objects(t_args *args, t_objects *objs, t_session *session)
 	i = -1;
 	while (++i < args->noc)
 	{
-		objs->dongles[i] = (t_dongle){0};
+		objs->coders[i].left = &objs->dongles[(i + args->noc - 1) % args->noc];
 		objs->dongles[i].available = true;
 		objs->dongles[i].id = i + 1;
 		objs->dongles[i].last_use = 0;
-		objs->coders[i] = (t_coder){0};
+		objs->dongles[i].heap[0] = &objs->coders[i];
+		objs->dongles[i].heap[1] = &objs->coders[(i + 1) % args->noc];
 		objs->coders[i].right = &objs->dongles[i % args->noc];
 		objs->coders[i].id = i + 1;
 		objs->coders[i].args = args;
 		objs->coders[i].session = session;
-		objs->coders[i].left = &objs->dongles[
-			(i + args->noc - 1) % args->noc
-		];
+		objs->coders[i].over = false;
+		objs->coders[i].waiting = false;
+		objs->coders[i].request_seq = 0;
+		objs->coders[i].last_compile = 0;
 		pthread_mutex_init(&objs->coders[i].over_mutex, NULL);
 		pthread_mutex_init(&objs->coders[i].last_compile_mutex, NULL);
 	}

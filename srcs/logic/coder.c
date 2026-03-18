@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 17:40:19 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 21:57:34 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 23:00:59 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,43 +21,61 @@
 #include "helpers.h"
 #include "monitor.h"
 #include "threads.h"
+#include "queue.h"
 
-static t_status	take_dongles(
-	t_coder *coder, t_dongle *dongle_1, t_dongle *dongle_2, t_session *session
-)
+static bool	session_is_over(t_session *session)
+{
+	bool	over;
+
+	pthread_mutex_lock(&session->over_mutex);
+	over = session->over;
+	pthread_mutex_unlock(&session->over_mutex);
+	return (over);
+}
+
+static bool	dongles_cooled_down(t_coder *coder)
+{
+	if (elapsed_time_ms(coder->left->last_use) < coder->args->dc)
+		return (false);
+	if (elapsed_time_ms(coder->right->last_use) < coder->args->dc)
+		return (false);
+	return (true);
+}
+
+static t_status	take_dongles(t_coder *coder, t_session *session)
 {
 	while (1)
 	{
 		pthread_mutex_lock(&session->dongles_mutex);
-		while (!(dongle_1->available && dongle_2->available))
+		queue_enter(coder);
+		if (session_is_over(session))
 		{
-			pthread_mutex_lock(&session->over_mutex);
-			if (session->over)
-			{
-				pthread_mutex_unlock(&session->over_mutex);
-				pthread_mutex_unlock(&session->dongles_mutex);
-				return (OVER);
-			}
-			pthread_mutex_unlock(&session->over_mutex);
-			pthread_cond_wait(&session->dongles_cond, &session->dongles_mutex);
+			queue_leave(coder);
+			pthread_mutex_unlock(&session->dongles_mutex);
+			return (OVER);
 		}
-		if (elapsed_time_ms(dongle_1->last_use) >= coder->args->dc
-			&& elapsed_time_ms(dongle_2->last_use) >= coder->args->dc)
+		if (!coder->left->available || !coder->right->available)
 		{
-			dongle_1->available = false;
-			dongle_2->available = false;
+			pthread_cond_wait(&session->dongles_cond, &session->dongles_mutex);
+			pthread_mutex_unlock(&session->dongles_mutex);
+			continue ;
+		}
+		if (!dongles_cooled_down(coder))
+		{
+			pthread_mutex_unlock(&session->dongles_mutex);
+			usleep(100);
+			continue ;
+		}
+		if (queue_can_take(coder))
+		{
+			coder->left->available = false;
+			coder->right->available = false;
+			queue_leave(coder);
 			pthread_mutex_unlock(&session->dongles_mutex);
 			break ;
 		}
+		pthread_cond_wait(&session->dongles_cond, &session->dongles_mutex);
 		pthread_mutex_unlock(&session->dongles_mutex);
-		pthread_mutex_lock(&session->over_mutex);
-		if (session->over)
-		{
-			pthread_mutex_unlock(&session->over_mutex);
-			return (OVER);
-		}
-		pthread_mutex_unlock(&session->over_mutex);
-		usleep(100);
 	}
 	if (log_activity(session->start_ms, "has taken a dongle", coder, 0)
 		|| log_activity(session->start_ms, "has taken a dongle", coder, 0))
@@ -97,12 +115,7 @@ extern void	*handle_coder(void *arg)
 	status = WORKING;
 	while (++i < coder->args->nocr)
 	{
-		if (coder->id % 2 == 0)
-			status = take_dongles(
-					coder, coder->left, coder->right, coder->session);
-		else
-			status = take_dongles(
-					coder, coder->right, coder->left, coder->session);
+		status = take_dongles(coder, coder->session);
 		if (status != WORKING)
 			return (NULL);
 		if (routine(coder, coder->args, coder->session) != WORKING)
