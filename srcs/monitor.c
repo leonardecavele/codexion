@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 13:15:46 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 15:38:42 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 15:49:25 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@ static bool	check_burnout(t_objects *objects, t_args *args, t_session *session)
 		if (current_time_ms() - objects->coders[i].last_compile >= args->ttb)
 		{
 			pthread_mutex_lock(&session->print_mutex);
+			log_activity(
+				session->start_ms, "burned out", &objects->coders[i], 0
+			);
 			fprintf(
 				stdout, "%zu %zu burned out\n",
 				elapsed_time_ms(session->start_ms), objects->coders[i].id
