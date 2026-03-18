@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 18:15:59 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 20:48:11 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 21:07:17 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ extern t_status	log_activity(
 	size_t	remaining_ms;
 
 	if (!bool_thread_cmp(
-		&coder->session->over_mutex, &coder->session->over, true))
+			&coder->session->over_mutex,
+			&coder->session->over,
+			true
+		))
 		return (OVER);
 	pthread_mutex_lock(&coder->session->print_mutex);
 	printf("%zu %zu %s\n", elapsed_time_ms(start_ms), coder->id, activity);
@@ -51,7 +54,10 @@ extern t_status	log_activity(
 	while (1)
 	{
 		if (!bool_thread_cmp(
-			&coder->session->over_mutex, &coder->session->over, true))
+				&coder->session->over_mutex,
+				&coder->session->over,
+				true
+			))
 			return (OVER);
 		now_ms = current_time_ms();
 		if (now_ms >= end_ms)
