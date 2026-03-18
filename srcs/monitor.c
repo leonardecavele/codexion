@@ -6,11 +6,16 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 13:15:46 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 17:16:01 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 17:43:45 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "monitor.h"
+#include <unistd.h>
+
+#include "helpers.h"
+#include "objects.h"
+#include "session.h"
+#include "args.h"
 
 static t_burnout_status	check_burnout(t_objects *objects, t_args *args)
 {

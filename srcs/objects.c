@@ -6,12 +6,18 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:09:00 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/17 18:37:30 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 17:34:07 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
+#include <pthread.h>
+
+#include "args.h"
+#include "error.h"
 #include "objects.h"
 #include "session.h"
+
 
 extern void	set_up_objects(t_args *args, t_objects *objs, t_session *session)
 {

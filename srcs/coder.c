@@ -6,12 +6,21 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 17:40:19 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 17:16:07 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 17:40:08 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <pthread.h>
+#include <unistd.h>
+
+#include "objects.h"
+#include "args.h"
 #include "coder.h"
 #include "session.h"
+#include "helpers.h"
+#include "monitor.h"
+
+
 
 // est-ce que je peux prendre tel dongle
 // -> verifie la queue

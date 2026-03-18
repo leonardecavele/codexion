@@ -6,11 +6,14 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 11:58:44 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 15:35:56 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 17:23:03 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "debug.h"
+#include <stdio.h>
+
+#include "args.h"
+#include "objects.h"
 
 extern void	debug_ids(t_args args, t_objects objects)
 {

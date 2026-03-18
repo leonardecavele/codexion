@@ -6,12 +6,19 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 16:26:30 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 17:38:45 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "session.h"
+#include <pthread.h>
+
 #include "objects.h"
+#include "session.h"
+#include "helpers.h"
+#include "args.h"
+#include "error.h"
+#include "coder.h"
+#include "monitor.h"
 
 static void	enable_session(t_args *args, t_session *session)
 {

@@ -6,11 +6,16 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:27:31 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/17 17:03:52 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 17:33:18 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+
 #include "args.h"
+#include "error.h"
 
 static t_errcode	parse_int_arg(const char *s, size_t *arg)
 {
