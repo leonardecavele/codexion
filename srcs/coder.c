@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 17:40:19 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 14:13:00 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 15:38:10 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static void	exec_activity(
 	usleep(time_to_wait * 1000);
 }
 
+// issue here
 static void	take_dongles(
 	t_coder *coder, t_dongle *dongle_1, t_dongle *dongle_2
 )
@@ -53,12 +54,12 @@ static void	take_dongles(
 
 static void	routine(t_coder *coder)
 {
-	exec_activity(
-		coder->session->start_ms, "is compiling", coder, coder->args->ttc
-	);
 	pthread_mutex_lock(&coder->last_compile_mutex);
 	coder->last_compile = current_time_ms();
 	pthread_mutex_unlock(&coder->last_compile_mutex);
+	exec_activity(
+		coder->session->start_ms, "is compiling", coder, coder->args->ttc
+	);
 	coder->left->last_use = current_time_ms();
 	coder->right->last_use = current_time_ms();
 	pthread_mutex_lock(&coder->session->dongles_mutex);
@@ -80,7 +81,7 @@ extern void	*handle_coder(void *arg)
 	size_t	i;
 
 	coder = (t_coder *)arg;
-	while (!coder->session->ready && usleep(100))
+	while (!usleep(100) && !coder->session->ready)
 		if (coder->session->killed)
 			return (NULL);
 	i = -1;
@@ -92,5 +93,8 @@ extern void	*handle_coder(void *arg)
 			take_dongles(coder, coder->right, coder->left);
 		routine(coder);
 	}
+	pthread_mutex_lock(&coder->over_mutex);
+	coder->over = true;
+	pthread_mutex_unlock(&coder->over_mutex);
 	return (NULL);
 }
