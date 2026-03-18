@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:09:00 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 20:46:35 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 21:56:21 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include "error.h"
 #include "objects.h"
 #include "session.h"
-
 
 extern void	set_up_objects(t_args *args, t_objects *objs, t_session *session)
 {

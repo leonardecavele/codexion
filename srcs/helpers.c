@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 18:15:59 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 21:07:17 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 21:32:38 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@ extern size_t	current_time_ms(void)
 extern size_t	elapsed_time_ms(size_t start_ms)
 {
 	return ((size_t)(current_time_ms() - start_ms));
+}
+
+extern void	log_burnout(size_t start_ms, t_coder *coder)
+{
+	pthread_mutex_lock(&coder->session->print_mutex);
+	printf("%zu %zu burned out\n", elapsed_time_ms(start_ms), coder->id);
+	pthread_mutex_unlock(&coder->session->print_mutex);
 }
 
 extern t_status	log_activity(

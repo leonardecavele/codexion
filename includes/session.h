@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:56 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 20:10:57 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 21:20:24 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_session
 	bool			over;
 	bool			ready;
 	t_objects		objects;
+	t_args			*args;
 }	t_session;
 
 t_errcode	handle_session(t_args *args, t_session *session);

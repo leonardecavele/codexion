@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 20:14:24 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 22:04:26 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,11 @@ static t_errcode	set_up_session(
 {
 	size_t		i;
 
-	if (pthread_create(&session->monitor, NULL, handle_monitor, objects) != 0)
+	if (pthread_create(&session->monitor, NULL, handle_monitor, session) != 0)
 		return (THREAD_CREATE_ERROR);
 	i = -1;
 	while (++i < args->noc)
+	{
 		if (pthread_create(
 				&objects->coders[i].thread, NULL,
 				handle_coder, &objects->coders[i]
@@ -66,12 +67,13 @@ static t_errcode	set_up_session(
 			wait_session(i, session);
 			return (THREAD_CREATE_ERROR);
 		}
+	}
 	return (NO_ERROR);
 }
 
 extern t_errcode	handle_session(t_args *args, t_session *session)
 {
-	t_errcode errcode;
+	t_errcode	errcode;
 
 	pthread_mutex_init(&session->print_mutex, NULL);
 	pthread_mutex_init(&session->dongles_mutex, NULL);
