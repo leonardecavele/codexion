@@ -20,6 +20,7 @@ SRCS = main.c \
 	   logic/session.c \
 	   logic/coder.c \
 	   logic/monitor.c \
+	   logic/threads.c \
 	   helpers.c
 
 # objects

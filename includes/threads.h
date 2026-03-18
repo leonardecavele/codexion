@@ -1,30 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   helpers.h                                          :+:      :+:    :+:   */
+/*   threads.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/16 18:18:32 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 19:14:34 by ldecavel         ###   ########.fr       */
+/*   Created: 2026/03/18 19:13:56 by ldecavel          #+#    #+#             */
+/*   Updated: 2026/03/18 19:53:33 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HELPERS_H
-# define HELPERS_H
+#ifndef THREADS_H
+# define THREADS_H
 
-# include <stddef.h>
-# include <pthread.h>
+#include <pthread.h>
 
-# include "session.h"
+typedef struct s_session	t_session;
 
-typedef struct s_coder	t_coder;
-
-size_t		current_time_ms(void);
-size_t		elapsed_time_ms(size_t start_ms);
-
-t_status	log_activity(
-	size_t start_ms, char *activity, t_coder *coder, size_t time_to_wait
-);
+t_status	wait_session_start(t_session *session);
+ssize_t		integer_thread_cmp(pthread_mutex_t *mutex, size_t v1, size_t v2);
+void		integer_thread_set(pthread_mutex_t *mutex, size_t *dst, size_t v);
 
 #endif

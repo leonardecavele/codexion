@@ -6,12 +6,11 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 19:06:30 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 19:39:56 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
-#include <unistd.h>
 
 #include "objects.h"
 #include "session.h"
@@ -20,18 +19,7 @@
 #include "error.h"
 #include "coder.h"
 #include "monitor.h"
-
-extern t_status	wait_start_session(t_session *session)
-{
-	while (1)
-	{
-		if (integer_thread_cmp(&session->ready_mutex, session->ready, true))
-			return (WORKING);
-		if (integer_thread_cmp(&session->over_mutex, session->over, true))
-			return (OVER);
-		usleep(100);
-	}
-}
+#include "threads.h"
 
 static void	wait_session(size_t n_threads, t_session *session)
 {
@@ -56,9 +44,7 @@ static void	start_session(t_args *args, t_session *session)
 	i = -1;
 	while (++i < args->noc)
 		session->objects.coders[i].last_compile = session->start_ms;
-	pthread_mutex_lock(&session->ready_mutex);
-	session->ready = true;
-	pthread_mutex_unlock(&session->ready_mutex);
+	integer_thread_set(&session->ready_mutex, &session->ready, true);
 }
 
 static t_errcode	set_up_session(
@@ -76,9 +62,7 @@ static t_errcode	set_up_session(
 				handle_coder, &objects->coders[i]
 			) != 0)
 		{
-			pthread_mutex_lock(&session->over_mutex);
-			session->over = true;
-			pthread_mutex_unlock(&session->over_mutex);
+			integer_thread_set(&session->over_mutex, &session->over, true);
 			wait_session(i, session);
 			return (THREAD_CREATE_ERROR);
 		}

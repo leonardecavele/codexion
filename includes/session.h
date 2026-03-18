@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:56 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 19:10:53 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 19:14:39 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,5 @@ typedef struct s_session
 }	t_session;
 
 t_errcode	handle_session(t_args *args, t_session *session);
-t_status	wait_start_session(t_session *session);
 
 #endif

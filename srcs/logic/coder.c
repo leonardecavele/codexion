@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 17:40:19 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 19:06:54 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 19:42:57 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <pthread.h>
@@ -19,6 +19,7 @@
 #include "session.h"
 #include "helpers.h"
 #include "monitor.h"
+#include "threads.h"
 
 
 
@@ -70,18 +71,16 @@ static t_status	take_dongles(
 
 static t_status	routine(t_coder *coder, t_args *args, t_session *session)
 {
-	pthread_mutex_lock(&coder->last_compile_mutex);
-	coder->last_compile = current_time_ms();
-	pthread_mutex_unlock(&coder->last_compile_mutex);
+	integer_thread_set(
+		&coder->last_compile_mutex, &coder->last_compile, current_time_ms()
+	);
 	if (log_activity(session->start_ms, "is compiling", coder, args->ttc))
 		return (OVER);
 	coder->left->last_use = current_time_ms();
 	coder->right->last_use = current_time_ms();
-	pthread_mutex_lock(&session->dongles_mutex);
-	coder->left->available = true;
-	coder->right->available = true;
+	integer_thread_set(&session->dongles_mutex, &coder->left->available, true);
+	integer_thread_set(&session->dongles_mutex, &coder->right->available, true);
 	pthread_cond_broadcast(&session->dongles_cond);
-	pthread_mutex_unlock(&session->dongles_mutex);
 	if (log_activity(session->start_ms, "is debugging", coder, args->ttd)
 		|| log_activity(session->start_ms, "is refactoring", coder, args->ttr))
 		return (OVER);
@@ -95,7 +94,7 @@ extern void	*handle_coder(void *arg)
 	size_t				i;
 
 	coder = (t_coder *)arg;
-	if (wait_start_session(coder->session) == OVER)
+	if (wait_session_start(coder->session) == OVER)
 			return (NULL);
 	i = -1;
 	status = WORKING;
@@ -114,8 +113,6 @@ extern void	*handle_coder(void *arg)
 		if (routine(coder, coder->args, coder->session) != WORKING)
 			return (NULL);
 	}
-	pthread_mutex_lock(&coder->over_mutex);
-	coder->over = true;
-	pthread_mutex_unlock(&coder->over_mutex);
+	integer_thread_set(&coder->over_mutex, &coder->over, true);
 	return (NULL);
 }
