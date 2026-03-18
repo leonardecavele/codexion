@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 18:15:59 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 20:20:47 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 20:48:11 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,26 +37,29 @@ extern t_status	log_activity(
 	size_t start_ms, char *activity, t_coder *coder, size_t time_to_wait
 )
 {
-	size_t	elapsed;
-	size_t	chunk;
+	size_t	end_ms;
+	size_t	now_ms;
+	size_t	remaining_ms;
 
-	if (bool_thread_cmp(
+	if (!bool_thread_cmp(
 		&coder->session->over_mutex, &coder->session->over, true))
 		return (OVER);
 	pthread_mutex_lock(&coder->session->print_mutex);
 	printf("%zu %zu %s\n", elapsed_time_ms(start_ms), coder->id, activity);
 	pthread_mutex_unlock(&coder->session->print_mutex);
-	elapsed = 0;
-	while (elapsed < time_to_wait)
+	end_ms = current_time_ms() + time_to_wait;
+	while (1)
 	{
-		if (bool_thread_cmp(
+		if (!bool_thread_cmp(
 			&coder->session->over_mutex, &coder->session->over, true))
 			return (OVER);
-		chunk = time_to_wait - elapsed;
-		if (chunk > 1)
-			chunk = 1;
-		usleep(chunk * 1000);
-		elapsed += chunk;
+		now_ms = current_time_ms();
+		if (now_ms >= end_ms)
+			break ;
+		remaining_ms = end_ms - now_ms;
+		if (remaining_ms > 1)
+			remaining_ms = 1;
+		usleep(remaining_ms * 1000);
 	}
 	return (WORKING);
 }

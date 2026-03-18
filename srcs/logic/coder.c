@@ -6,9 +6,10 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 17:40:19 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 20:19:35 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 20:38:31 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <pthread.h>
 #include <unistd.h>
 #include <stdbool.h>
@@ -76,8 +77,10 @@ static t_status	routine(t_coder *coder, t_args *args, t_session *session)
 	);
 	if (log_activity(session->start_ms, "is compiling", coder, args->ttc))
 		return (OVER);
-	coder->left->last_use = current_time_ms();
-	coder->right->last_use = current_time_ms();
+	size_t_thread_set(
+		&session->dongles_mutex, &coder->left->last_use, current_time_ms());
+	size_t_thread_set(
+		&session->dongles_mutex, &coder->right->last_use, current_time_ms());
 	bool_thread_set(&session->dongles_mutex, &coder->left->available, true);
 	bool_thread_set(&session->dongles_mutex, &coder->right->available, true);
 	pthread_cond_broadcast(&session->dongles_cond);

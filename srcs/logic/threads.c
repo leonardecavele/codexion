@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 19:12:35 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 20:13:17 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 20:39:30 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,12 @@ extern ssize_t	size_t_thread_cmp(pthread_mutex_t *mutex, size_t *v1, size_t v2)
 	ssize_t	rt;
 
 	pthread_mutex_lock(mutex);
-	rt = *v1 - v2;
+	if (*v1 == v2)
+		rt = 0;
+	else if (*v1 > v2)
+		rt = 1;
+	else
+		rt = -1;
 	pthread_mutex_unlock(mutex);
 	return (rt);
 }

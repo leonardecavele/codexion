@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 13:15:46 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 20:21:59 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 20:36:49 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,27 @@ extern void	*handle_monitor(void *arg)
 	session = objects->coders[0].session;
 	if (wait_session_start(session) == OVER)
 		return (NULL);
+	// retravailler check burnout
 	while (1)
 	{
 		burnout_id = check_burnout(objects, args);
-		if (!usleep(100) && (burnout_id > -1
-			|| check_over(objects, args) == true))
+		if (burnout_id > -1)
 		{
-			pthread_mutex_lock(&session->dongles_mutex);
 			bool_thread_set(&session->over_mutex, &session->over, true);
+			pthread_mutex_lock(&session->dongles_mutex);
 			pthread_cond_broadcast(&session->dongles_cond);
 			pthread_mutex_unlock(&session->dongles_mutex);
 			log_activity(
 				session->start_ms, "burned out", &objects->coders[burnout_id], 0
 			);
+			return (NULL);
+		}
+		if (check_over(objects, args))
+		{
+			bool_thread_set(&session->over_mutex, &session->over, true);
+			pthread_mutex_lock(&session->dongles_mutex);
+			pthread_cond_broadcast(&session->dongles_cond);
+			pthread_mutex_unlock(&session->dongles_mutex);
 			return (NULL);
 		}
 	}
