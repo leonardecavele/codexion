@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:22:50 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 17:47:02 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 18:11:24 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ int	main(int ac, char **av)
 	t_session	session;
 	t_args		args;
 
+	session = (t_session){0};
 	args = (t_args){0};
 	errcode = parse_args(ac - 1, av + 1, &args);
 	if (errcode != NO_ERROR)
 		return (error_message(errcode));
 	if (args.noc == 0)
 		return (error_message(ZERO_CODERS_ERROR));
-	session.objects = (t_objects){0};
 	errcode = allocate_objects(args, &session.objects);
 	if (errcode == NO_ERROR)
 	{
