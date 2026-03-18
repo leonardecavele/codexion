@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 14:12:25 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 16:26:30 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ extern t_errcode	start_session(t_args *args, t_session *session)
 	objects = &session->objects;
 	pthread_mutex_init(&session->print_mutex, NULL);
 	pthread_mutex_init(&session->dongles_mutex, NULL);
+	pthread_mutex_init(&session->killed_mutex, NULL);
 	pthread_cond_init(&session->dongles_cond, NULL);
 	if (pthread_create(&session->monitor, NULL, handle_monitor, objects) != 0)
 		return (THREAD_CREATE_ERROR);
@@ -43,7 +44,9 @@ extern t_errcode	start_session(t_args *args, t_session *session)
 				handle_coder, &objects->coders[i]
 			) != 0)
 		{
+			pthread_mutex_lock(&session->killed_mutex);
 			session->killed = true;
+			pthread_mutex_unlock(&session->killed_mutex);
 			wait_session(i, session);
 			return (THREAD_CREATE_ERROR);
 		}

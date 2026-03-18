@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:56 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 14:16:31 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 16:30:07 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_session
 	pthread_t		monitor;
 	t_objects		objects;
 	bool			ready;
+	pthread_mutex_t	killed_mutex;
 	bool			killed;
 }	t_session;
 
