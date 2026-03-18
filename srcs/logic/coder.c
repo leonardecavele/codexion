@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 17:40:19 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 23:00:59 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 23:09:52 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,6 @@
 #include "threads.h"
 #include "queue.h"
 
-static bool	session_is_over(t_session *session)
-{
-	bool	over;
-
-	pthread_mutex_lock(&session->over_mutex);
-	over = session->over;
-	pthread_mutex_unlock(&session->over_mutex);
-	return (over);
-}
-
 static bool	dongles_cooled_down(t_coder *coder)
 {
 	if (elapsed_time_ms(coder->left->last_use) < coder->args->dc)
@@ -48,7 +38,7 @@ static t_status	take_dongles(t_coder *coder, t_session *session)
 	{
 		pthread_mutex_lock(&session->dongles_mutex);
 		queue_enter(coder);
-		if (session_is_over(session))
+		if (!bool_thread_cmp(&session->over_mutex, &session->over, true))
 		{
 			queue_leave(coder);
 			pthread_mutex_unlock(&session->dongles_mutex);
@@ -77,8 +67,11 @@ static t_status	take_dongles(t_coder *coder, t_session *session)
 		pthread_cond_wait(&session->dongles_cond, &session->dongles_mutex);
 		pthread_mutex_unlock(&session->dongles_mutex);
 	}
-	if (log_activity(session->start_ms, "has taken a dongle", coder, 0)
-		|| log_activity(session->start_ms, "has taken a dongle", coder, 0))
+	if (log_activity(
+		session->start_ms, "has taken a dongle", coder, 0) == OVER)
+		return (OVER);
+	if (log_activity(
+		session->start_ms, "has taken a dongle", coder, 0) == OVER)
 		return (OVER);
 	return (WORKING);
 }
@@ -87,7 +80,7 @@ static t_status	routine(t_coder *coder, t_args *args, t_session *session)
 {
 	size_t_thread_set(
 		&coder->last_compile_mutex, &coder->last_compile, current_time_ms());
-	if (log_activity(session->start_ms, "is compiling", coder, args->ttc))
+	if (log_activity(session->start_ms, "is compiling", coder, args->ttc) == OVER)
 		return (OVER);
 	pthread_mutex_lock(&session->dongles_mutex);
 	coder->left->last_use = current_time_ms();
@@ -96,8 +89,11 @@ static t_status	routine(t_coder *coder, t_args *args, t_session *session)
 	coder->right->available = true;
 	pthread_cond_broadcast(&session->dongles_cond);
 	pthread_mutex_unlock(&session->dongles_mutex);
-	if (log_activity(session->start_ms, "is debugging", coder, args->ttd)
-		|| log_activity(session->start_ms, "is refactoring", coder, args->ttr))
+	if (log_activity(
+		session->start_ms, "is debugging", coder, args->ttd) == OVER)
+		return (OVER);
+	if (log_activity(
+		session->start_ms, "is refactoring", coder, args->ttr) == OVER)
 		return (OVER);
 	return (WORKING);
 }
