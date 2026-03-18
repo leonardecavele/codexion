@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 13:15:46 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 19:56:08 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 20:21:59 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,22 @@
 #include "args.h"
 #include "threads.h"
 
-static t_status	check_burnout(t_objects *objects, t_args *args)
+static ssize_t	check_burnout(t_objects *objects, t_args *args)
 {
 	size_t	i;
 
 	i = -1;
 	while (++i < args->noc)
 	{
-		if (!integer_thread_cmp(
-			&objects->coders[i].over_mutex, objects->coders[i].over, true)
+		if (!bool_thread_cmp(
+			&objects->coders[i].over_mutex, &objects->coders[i].over, true))
 			continue ;
-		if (integer_thread_cmp(
-				&objects->coders[i].last_compile_mutex,
-				current_time_ms() - objects->coders[i].last_compile, args->ttb
-			) >= 0)
-			return (objects->coders[i].id);
+		if (size_t_thread_cmp(
+			&objects->coders[i].last_compile_mutex,
+			&objects->coders[i].last_compile,
+			current_time_ms() - args->ttb
+		) <= 0)
+		return (objects->coders[i].id);
 	}
 	return (-1);
 }
@@ -44,8 +45,8 @@ static bool	check_over(t_objects *objects, t_args *args)
 
 	i = -1;
 	while (++i < args->noc)
-		if (!integer_thread_cmp(
-			&objects->coders[i].over_mutex, objects->coders[i].over, false)
+		if (!bool_thread_cmp(
+			&objects->coders[i].over_mutex, &objects->coders[i].over, false))
 			return (false);
 	return (true);
 }
@@ -69,7 +70,7 @@ extern void	*handle_monitor(void *arg)
 			|| check_over(objects, args) == true))
 		{
 			pthread_mutex_lock(&session->dongles_mutex);
-			integer_thread_set(&session->over_mutex, &session->over, true);
+			bool_thread_set(&session->over_mutex, &session->over, true);
 			pthread_cond_broadcast(&session->dongles_cond);
 			pthread_mutex_unlock(&session->dongles_mutex);
 			log_activity(

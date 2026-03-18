@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 18:15:59 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 19:33:42 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 20:20:47 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ extern t_status	log_activity(
 	size_t	elapsed;
 	size_t	chunk;
 
-	if (integer_thread_cmp(
-		&coder->session->over_mutex, coder->session->over, true))
+	if (bool_thread_cmp(
+		&coder->session->over_mutex, &coder->session->over, true))
 		return (OVER);
 	pthread_mutex_lock(&coder->session->print_mutex);
 	printf("%zu %zu %s\n", elapsed_time_ms(start_ms), coder->id, activity);
@@ -49,8 +49,8 @@ extern t_status	log_activity(
 	elapsed = 0;
 	while (elapsed < time_to_wait)
 	{
-		if (integer_thread_cmp(
-			&coder->session->over_mutex, coder->session->over, true))
+		if (bool_thread_cmp(
+			&coder->session->over_mutex, &coder->session->over, true))
 			return (OVER);
 		chunk = time_to_wait - elapsed;
 		if (chunk > 1)

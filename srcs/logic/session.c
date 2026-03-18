@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 19:39:56 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 20:14:24 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	start_session(t_args *args, t_session *session)
 	i = -1;
 	while (++i < args->noc)
 		session->objects.coders[i].last_compile = session->start_ms;
-	integer_thread_set(&session->ready_mutex, &session->ready, true);
+	bool_thread_set(&session->ready_mutex, &session->ready, true);
 }
 
 static t_errcode	set_up_session(
@@ -62,7 +62,7 @@ static t_errcode	set_up_session(
 				handle_coder, &objects->coders[i]
 			) != 0)
 		{
-			integer_thread_set(&session->over_mutex, &session->over, true);
+			bool_thread_set(&session->over_mutex, &session->over, true);
 			wait_session(i, session);
 			return (THREAD_CREATE_ERROR);
 		}
