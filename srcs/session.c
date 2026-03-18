@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 17:38:45 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 18:01:20 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,18 @@
 #include "coder.h"
 #include "monitor.h"
 
+static void	wait_session(size_t n_threads, t_session *session)
+{
+	size_t	i;
+
+	i = -1;
+	while (++i < n_threads)
+		pthread_join(session->objects.coders[i].thread, NULL);
+	pthread_join(session->monitor, NULL);
+	pthread_mutex_destroy(&session->print_mutex);
+	pthread_mutex_destroy(&session->dongles_mutex);
+}
+
 static void	enable_session(t_args *args, t_session *session)
 {
 	size_t	i;
@@ -31,16 +43,12 @@ static void	enable_session(t_args *args, t_session *session)
 	session->ready = true;
 }
 
-extern t_errcode	start_session(t_args *args, t_session *session)
+static t_errcode	start_session(t_args *args, t_session *session)
 {
 	size_t		i;
 	t_objects	*objects;
 
 	objects = &session->objects;
-	pthread_mutex_init(&session->print_mutex, NULL);
-	pthread_mutex_init(&session->dongles_mutex, NULL);
-	pthread_mutex_init(&session->killed_mutex, NULL);
-	pthread_cond_init(&session->dongles_cond, NULL);
 	if (pthread_create(&session->monitor, NULL, handle_monitor, objects) != 0)
 		return (THREAD_CREATE_ERROR);
 	i = -1;
@@ -62,14 +70,16 @@ extern t_errcode	start_session(t_args *args, t_session *session)
 	return (NO_ERROR);
 }
 
-extern void	wait_session(size_t n_threads, t_session *session)
+extern t_errcode	handle_session(t_args *args, t_session *session)
 {
-	size_t	i;
+	t_errcode errcode;
 
-	i = -1;
-	while (++i < n_threads)
-		pthread_join(session->objects.coders[i].thread, NULL);
-	pthread_join(session->monitor, NULL);
-	pthread_mutex_destroy(&session->print_mutex);
-	pthread_mutex_destroy(&session->dongles_mutex);
+	pthread_mutex_init(&session->print_mutex, NULL);
+	pthread_mutex_init(&session->dongles_mutex, NULL);
+	pthread_mutex_init(&session->killed_mutex, NULL);
+	pthread_cond_init(&session->dongles_cond, NULL);
+	errcode = start_session(args, session);
+	if (errcode == NO_ERROR)
+		wait_session(args->noc, session);
+	return (errcode);
 }

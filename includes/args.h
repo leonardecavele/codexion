@@ -6,23 +6,22 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:12:56 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/16 12:22:18 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 17:30:50 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ARGS_H
 # define ARGS_H
 
+# include <stddef.h>
 # include <stdbool.h>
-# include <stdlib.h>
-# include <string.h>
 
 # include "error.h"
 
 typedef enum e_schedules
 {
-	FIFO = false,
-	EDF = true
+	FIFO,
+	EDF
 }	t_schedules;
 
 typedef struct s_args

@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 18:15:59 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 17:42:19 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 18:05:27 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,20 +39,21 @@ extern t_burnout_status	log_activity(
 	size_t	chunk;
 
 	pthread_mutex_lock(&coder->session->print_mutex);
-	fprintf(
-		stdout, "%zu %zu %s\n", elapsed_time_ms(start_ms), coder->id, activity
-		);
+	printf("%zu %zu %s\n", elapsed_time_ms(start_ms), coder->id, activity);
 	pthread_mutex_unlock(&coder->session->print_mutex);
 	elapsed = 0;
-	chunk = 1;
-	while (elapsed < time_to_wait - elapsed < chunk)
+	while (elapsed < time_to_wait)
 	{
 		pthread_mutex_lock(&coder->session->killed_mutex);
 		if (coder->session->killed)
+		{
+			pthread_mutex_unlock(&coder->session->killed_mutex);
 			return (OVER);
+		}
 		pthread_mutex_unlock(&coder->session->killed_mutex);
-		if (time_to_wait - elapsed < chunk)
-			chunk = time_to_wait - elapsed;
+		chunk = time_to_wait - elapsed;
+		if (chunk > 1)
+			chunk = 1;
 		usleep(chunk * 1000);
 		elapsed += chunk;
 	}

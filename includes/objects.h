@@ -6,23 +6,20 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:04:22 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 15:23:36 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/18 17:39:00 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef OBJECTS_H
 # define OBJECTS_H
 
-# include <stdlib.h>
-# include <stdio.h>
-# include <string.h>
-# include <stddef.h>
 # include <pthread.h>
+# include <stdbool.h>
 
-# include "args.h"
 # include "error.h"
 
 typedef struct s_session	t_session;
+typedef struct s_args		t_args;
 
 typedef struct s_dongle
 {
