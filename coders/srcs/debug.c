@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 11:58:44 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 18:24:09 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 18:58:49 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "args.h"
 #include "objects.h"
 #include "session.h"
+#include "threads.h"
 
 extern void	debug_ids(t_args args, t_objects objects)
 {
@@ -38,6 +39,7 @@ extern void	debug_print(t_args args, const char *s)
 {
 	if (!args.debug)
 		return ;
+	printf("[DEBUG LOG]\n");
 	printf("%s\n", s);
 }
 
@@ -45,19 +47,31 @@ extern void	debug_priority(
 	t_args args, t_coder *coder, t_coder *other_left, t_coder *other_right
 )
 {
-	t_session	*session;
+	size_t	last[3];
+	size_t	deadline[3];
 
 	if (!args.debug)
 		return ;
-	session = coder->session;
-	pthread_mutex_lock(&session->print_mutex);
+	size_t_thread_set(
+		&coder->last_compile_mutex, &last[0], coder->last_compile);
+	size_t_thread_set(
+		&other_left->last_compile_mutex, &last[1], other_left->last_compile);
+	size_t_thread_set(
+		&other_right->last_compile_mutex, &last[2], other_right->last_compile);
+	deadline[0] = last[0] + args.ttb;
+	deadline[1] = last[1] + args.ttb;
+	deadline[2] = last[2] + args.ttb;
+	pthread_mutex_lock(&coder->session->print_mutex);
+	printf("[DEBUG PRIORITY]\n");
 	printf(
-		"coder %zu has priority over coders %zu and %zu\n",
-		coder->id,
-		other_left->id,
-		other_right->id
+		"winner [%zu] request [%zu] deadline [%zu] | "
+		"left [%zu] request [%zu] deadline [%zu] | "
+		"right [%zu] request [%zu] deadline [%zu]\n",
+		coder->id, coder->request_seq, deadline[0],
+		other_left->id, other_left->request_seq, deadline[1],
+		other_right->id, other_right->request_seq, deadline[2]
 		);
-	pthread_mutex_unlock(&session->print_mutex);
+	pthread_mutex_unlock(&coder->session->print_mutex);
 }
 
 extern void	debug_args(t_args args)
