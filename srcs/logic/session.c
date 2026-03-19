@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 22:04:26 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 12:45:00 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,11 @@ static void	wait_session(size_t n_threads, t_session *session)
 
 	i = -1;
 	while (++i < n_threads)
+	{
 		pthread_join(session->objects.coders[i].thread, NULL);
+		pthread_mutex_destroy(&session->objects.coders[i].last_compile_mutex);
+		pthread_mutex_destroy(&session->objects.coders[i].over_mutex);
+	}
 	pthread_join(session->monitor, NULL);
 	pthread_mutex_destroy(&session->print_mutex);
 	pthread_mutex_destroy(&session->dongles_mutex);
