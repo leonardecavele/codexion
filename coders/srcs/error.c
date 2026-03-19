@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 13:01:36 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 12:13:38 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 17:53:55 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	usage(void)
 		"Usage:\n"
 		"  ./codexion number_of_coders time_to_burnout time_to_compile "
 		"time_to_debug time_to_refactor number_of_compiles_required "
-		"dongle_cooldown scheduler [debug|DEBUG]\n"
+		"dongle_cooldown scheduler [debug]\n"
 		"\n"
 		"Arguments:\n"
 		"  number_of_coders            number of coders\n"
