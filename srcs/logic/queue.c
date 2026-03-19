@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 22:32:00 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 01:37:59 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 04:16:42 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "args.h"
 #include "helpers.h"
 #include "queue.h"
+#include "threads.h"
 
 static t_coder	*get_other_coder(t_dongle *dongle, t_coder *coder)
 {
@@ -48,12 +49,10 @@ static bool	has_priority(t_coder *coder, t_coder *other)
 		return (true);
 	if (coder->args->scheduler == FIFO)
 		return (coder->request_seq < other->request_seq);
-	pthread_mutex_lock(&coder->last_compile_mutex);
-	coder_last_compile = coder->last_compile;
-	pthread_mutex_unlock(&coder->last_compile_mutex);
-	pthread_mutex_lock(&other->last_compile_mutex);
-	other_last_compile = other->last_compile;
-	pthread_mutex_unlock(&other->last_compile_mutex);
+	size_t_thread_set(
+		&coder->last_compile_mutex, &coder_last_compile, coder->last_compile);
+	size_t_thread_set(
+		&other->last_compile_mutex, &other_last_compile, other->last_compile);
 	coder_deadline = coder_last_compile + coder->args->ttb;
 	other_deadline = other_last_compile + other->args->ttb;
 	if (coder_deadline != other_deadline)

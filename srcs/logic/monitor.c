@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 13:15:46 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 21:35:04 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 12:05:34 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,10 @@ extern void	*handle_monitor(void *arg)
 			log_burnout(
 				session->start_ms, &session->objects.coders[burnout_index]
 				);
+		else
+			bool_thread_set(&session->over_mutex, &session->over, true);
 		if (check_over(&session->objects, session->args) || burnout_index >= 0)
 		{
-			bool_thread_set(&session->over_mutex, &session->over, true);
 			pthread_mutex_lock(&session->dongles_mutex);
 			pthread_cond_broadcast(&session->dongles_cond);
 			pthread_mutex_unlock(&session->dongles_mutex);

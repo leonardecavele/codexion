@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:27:31 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 20:42:52 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 11:32:46 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ static t_errcode	parse_int_arg(const char *s, size_t *arg)
 
 static t_errcode	parse_scheduler_arg(const char *s, t_schedules *arg)
 {
-	if (!strcmp(s, "FIFO") || !strcmp(s, "fifo"))
+	if (!strcmp(s, "fifo"))
 		*arg = FIFO;
-	else if (!strcmp(s, "EDF") || !strcmp(s, "edf"))
+	else if (!strcmp(s, "edf"))
 		*arg = EDF;
 	else
 	{
@@ -61,7 +61,7 @@ static t_errcode	parse_debug_arg(const char *s, bool *arg, int ac)
 {
 	if (ac < 9)
 		return (NO_ERROR);
-	if (!strcmp(s, "DEBUG") || !strcmp(s, "debug"))
+	if (!strcmp(s, "debug"))
 		*arg = true;
 	else
 	{
