@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 22:32:00 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 15:24:00 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 18:19:07 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "helpers.h"
 #include "queue.h"
 #include "threads.h"
+#include "debug.h"
 
 static bool	neighbor_can_take_now(t_coder *coder)
 {
@@ -88,5 +89,6 @@ extern bool	queue_can_take(t_coder *coder)
 		return (false);
 	if (!has_priority(coder, other_right) && neighbor_can_take_now(other_right))
 		return (false);
+	debug_priority(*coder->args, coder, other_left, other_right);
 	return (true);
 }
