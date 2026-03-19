@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 16:02:28 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 19:15:24 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static void	wait_session(size_t n_threads, t_session *session)
 		pthread_mutex_destroy(&session->objects.coders[i].over_mutex);
 	}
 	pthread_mutex_destroy(&session->print_mutex);
+	pthread_mutex_destroy(&session->queue_mutex);
 	pthread_mutex_destroy(&session->dongles_mutex);
 	pthread_mutex_destroy(&session->over_mutex);
 	pthread_mutex_destroy(&session->ready_mutex);
@@ -91,6 +92,7 @@ extern t_errcode	handle_session(t_args *args, t_session *session)
 		|| pthread_mutex_init(&session->dongles_mutex, NULL) != 0
 		|| pthread_mutex_init(&session->over_mutex, NULL) != 0
 		|| pthread_mutex_init(&session->ready_mutex, NULL) != 0
+		|| pthread_mutex_init(&session->queue_mutex, NULL) != 0
 		|| pthread_cond_init(&session->dongles_cond, NULL) != 0)
 		return (MUTEX_INIT_ERROR);
 	debug_print(*args, "setting up session");

@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 11:58:44 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 18:58:49 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 19:39:33 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,28 +48,27 @@ extern void	debug_priority(
 )
 {
 	size_t	last[3];
-	size_t	deadline[3];
 
 	if (!args.debug)
 		return ;
-	size_t_thread_set(
-		&coder->last_compile_mutex, &last[0], coder->last_compile);
-	size_t_thread_set(
-		&other_left->last_compile_mutex, &last[1], other_left->last_compile);
-	size_t_thread_set(
-		&other_right->last_compile_mutex, &last[2], other_right->last_compile);
-	deadline[0] = last[0] + args.ttb;
-	deadline[1] = last[1] + args.ttb;
-	deadline[2] = last[2] + args.ttb;
+	pthread_mutex_lock(&coder->last_compile_mutex);
+	last[0] = coder->last_compile;
+	pthread_mutex_unlock(&coder->last_compile_mutex);
+	pthread_mutex_lock(&other_left->last_compile_mutex);
+	last[1] = other_left->last_compile;
+	pthread_mutex_unlock(&other_left->last_compile_mutex);
+	pthread_mutex_lock(&other_right->last_compile_mutex);
+	last[2] = other_right->last_compile;
+	pthread_mutex_unlock(&other_right->last_compile_mutex);
 	pthread_mutex_lock(&coder->session->print_mutex);
 	printf("[DEBUG PRIORITY]\n");
 	printf(
 		"winner [%zu] request [%zu] deadline [%zu] | "
 		"left [%zu] request [%zu] deadline [%zu] | "
 		"right [%zu] request [%zu] deadline [%zu]\n",
-		coder->id, coder->request_seq, deadline[0],
-		other_left->id, other_left->request_seq, deadline[1],
-		other_right->id, other_right->request_seq, deadline[2]
+		coder->id, coder->request_seq, last[0] + args.ttb,
+		other_left->id, other_left->request_seq, last[1] + args.ttb,
+		other_right->id, other_right->request_seq, last[2] + args.ttb
 		);
 	pthread_mutex_unlock(&coder->session->print_mutex);
 }

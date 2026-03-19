@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 17:40:19 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 15:39:33 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 19:23:24 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ static t_status	try_take_dongles(
 )
 {
 	pthread_mutex_lock(&session->dongles_mutex);
-	queue_enter(coder);
+	queue_enter(session, coder);
 	if (!bool_thread_cmp(&session->over_mutex, &session->over, true))
 	{
-		queue_leave(coder);
+		queue_leave(session, coder);
 		pthread_mutex_unlock(&session->dongles_mutex);
 		return (OVER);
 	}
@@ -52,11 +52,11 @@ static t_status	try_take_dongles(
 		usleep(100);
 		return (WORKING);
 	}
-	else if (queue_can_take(coder))
+	else if (queue_can_take(session, coder))
 	{
 		coder->left->available = false;
 		coder->right->available = false;
-		queue_leave(coder);
+		queue_leave(session, coder);
 		*taken = true;
 	}
 	pthread_mutex_unlock(&session->dongles_mutex);

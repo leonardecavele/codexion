@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:56 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 22:34:06 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 19:14:48 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_session
 	pthread_mutex_t	dongles_mutex;
 	pthread_mutex_t	over_mutex;
 	pthread_mutex_t	ready_mutex;
+	pthread_mutex_t	queue_mutex;
 	pthread_cond_t	dongles_cond;
 	pthread_t		monitor;
 	size_t			start_ms;
