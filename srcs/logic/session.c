@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 15:57:50 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 16:02:28 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static void	wait_session(size_t n_threads, t_session *session)
 {
 	size_t	i;
 
-	debug_print(*session->args, "cleaning session");
 	i = -1;
 	while (++i < n_threads)
 		pthread_join(session->objects.coders[i].thread, NULL);
