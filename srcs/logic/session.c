@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 14:17:47 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 15:57:50 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@
 #include "coder.h"
 #include "monitor.h"
 #include "threads.h"
+#include "debug.h"
 
 static void	wait_session(size_t n_threads, t_session *session)
 {
 	size_t	i;
 
+	debug_print(*session->args, "cleaning session");
 	i = -1;
 	while (++i < n_threads)
 		pthread_join(session->objects.coders[i].thread, NULL);
@@ -40,6 +42,7 @@ static void	wait_session(size_t n_threads, t_session *session)
 	pthread_mutex_destroy(&session->over_mutex);
 	pthread_mutex_destroy(&session->ready_mutex);
 	pthread_cond_destroy(&session->dongles_cond);
+	debug_print(*session->args, "session ended");
 }
 
 static void	start_session(t_args *args, t_session *session)
@@ -50,6 +53,7 @@ static void	start_session(t_args *args, t_session *session)
 	i = -1;
 	while (++i < args->noc)
 		session->objects.coders[i].last_compile = session->start_ms;
+	debug_print(*args, "starting session");
 	bool_thread_set(&session->ready_mutex, &session->ready, true);
 }
 
@@ -61,6 +65,7 @@ static t_errcode	set_up_session(
 
 	if (pthread_create(&session->monitor, NULL, handle_monitor, session) != 0)
 		return (THREAD_CREATE_ERROR);
+	debug_print(*args, "monitor thread successfully created");
 	i = -1;
 	while (++i < args->noc)
 	{
@@ -73,6 +78,7 @@ static t_errcode	set_up_session(
 			wait_session(i, session);
 			return (THREAD_CREATE_ERROR);
 		}
+		debug_print(*args, "coder thread successfully created");
 	}
 	return (NO_ERROR);
 }
@@ -81,12 +87,14 @@ extern t_errcode	handle_session(t_args *args, t_session *session)
 {
 	t_errcode	errcode;
 
+	debug_print(*args, "initiating mutexes");
 	if (pthread_mutex_init(&session->print_mutex, NULL) != 0
 		|| pthread_mutex_init(&session->dongles_mutex, NULL) != 0
 		|| pthread_mutex_init(&session->over_mutex, NULL) != 0
 		|| pthread_mutex_init(&session->ready_mutex, NULL) != 0
 		|| pthread_cond_init(&session->dongles_cond, NULL) != 0)
 		return (MUTEX_INIT_ERROR);
+	debug_print(*args, "setting up session");
 	errcode = set_up_session(args, session, &session->objects);
 	if (errcode == NO_ERROR)
 	{
