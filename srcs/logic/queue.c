@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 22:32:00 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 04:16:42 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 14:44:37 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,6 @@
 #include "helpers.h"
 #include "queue.h"
 #include "threads.h"
-
-static t_coder	*get_other_coder(t_dongle *dongle, t_coder *coder)
-{
-	if (dongle->heap[0] == coder)
-		return (dongle->heap[1]);
-	return (dongle->heap[0]);
-}
 
 static bool	neighbor_can_take_now(t_coder *coder)
 {
@@ -86,8 +79,12 @@ extern bool	queue_can_take(t_coder *coder)
 		return (false);
 	if (elapsed_time_ms(coder->right->last_use) < coder->args->dc)
 		return (false);
-	other_left = get_other_coder(coder->left, coder);
-	other_right = get_other_coder(coder->right, coder);
+	other_left = coder->left->heap[0];
+	if (coder->left->heap[0] == coder)
+		other_left = coder->left->heap[1];
+	other_right = coder->right->heap[0];
+	if (coder->right->heap[0] == coder)
+		other_right = coder->right->heap[1];
 	if (!has_priority(coder, other_left) && neighbor_can_take_now(other_left))
 		return (false);
 	if (!has_priority(coder, other_right) && neighbor_can_take_now(other_right))
