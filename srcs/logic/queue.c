@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 22:32:00 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 14:44:37 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 15:24:00 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,7 @@ extern void	queue_enter(t_coder *coder)
 	if (coder->waiting)
 		return ;
 	coder->waiting = true;
-	coder->request_seq = coder->session->next_request_seq;
-	coder->session->next_request_seq++;
+	coder->request_seq = coder->session->next_request_seq++;
 }
 
 extern void	queue_leave(t_coder *coder)

@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 17:40:19 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 04:04:32 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 15:39:33 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ static t_status	try_take_dongles(
 	t_coder *coder, t_session *session, bool *taken
 )
 {
-	*taken = false;
 	pthread_mutex_lock(&session->dongles_mutex);
 	queue_enter(coder);
 	if (!bool_thread_cmp(&session->over_mutex, &session->over, true))
