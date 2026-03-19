@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 22:32:00 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 22:47:05 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 01:37:59 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static bool	has_priority(t_coder *coder, t_coder *other)
 	return (coder->request_seq < other->request_seq);
 }
 
-void	queue_enter(t_coder *coder)
+extern void	queue_enter(t_coder *coder)
 {
 	if (coder->waiting)
 		return ;
@@ -70,13 +70,13 @@ void	queue_enter(t_coder *coder)
 	coder->session->next_request_seq++;
 }
 
-void	queue_leave(t_coder *coder)
+extern void	queue_leave(t_coder *coder)
 {
 	coder->waiting = false;
 	coder->request_seq = 0;
 }
 
-bool	queue_can_take(t_coder *coder)
+extern bool	queue_can_take(t_coder *coder)
 {
 	t_coder	*other_left;
 	t_coder	*other_right;
