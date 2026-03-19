@@ -8,7 +8,7 @@ BUILD_DIR = build
 
 # flags
 CC = cc
-CFLAGS = -MMD -MP -Wall -Wextra -Werror -I $(INC_DIR) -pthread -g3
+CFLAGS = -MMD -MP -Wall -Wextra -Werror -I $(INC_DIR) -pthread
 MAKEFLAGS += -j $$(nproc)
 
 # sources
@@ -31,6 +31,12 @@ DEPS = $(OBJS:.o=.d)
 # rules
 all: $(NAME)
 
+valgrind:
+	@make all --no-print-directory CFLAGS="$(CFLAGS) -g3"
+
+sanitize:
+	@make all --no-print-directory CFLAGS="$(CFLAGS) -g3 -fsanitize=thread"
+
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@
 
@@ -48,5 +54,5 @@ re: fclean
 	@make all --no-print-directory
 
 # miscellaneous
-.PHONY: all clean fclean re
+.PHONY: valgrind sanitize all clean fclean re
 -include $(DEPS)
