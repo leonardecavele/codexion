@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 11:58:44 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 17:23:03 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 16:01:22 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,13 @@ extern void	debug_ids(t_args args, t_objects objects)
 			objects.coders[i].right->id
 			);
 	}
+}
+
+extern void	debug_print(t_args args, const char *s)
+{
+	if (!args.debug)
+		return ;
+	fprintf(stdout, "%s\n", s);
 }
 
 extern void	debug_args(t_args args)

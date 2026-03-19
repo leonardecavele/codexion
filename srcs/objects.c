@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:09:00 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 22:34:44 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 15:59:49 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@
 #include "error.h"
 #include "objects.h"
 #include "session.h"
+#include "debug.h"
 
 extern void	set_up_objects(t_args *args, t_objects *objs, t_session *session)
 {
 	size_t	i;
 
+	debug_print(*args, "setting up objects");
 	i = -1;
 	while (++i < args->noc)
 	{
@@ -47,18 +49,21 @@ extern void	set_up_objects(t_args *args, t_objects *objs, t_session *session)
 
 extern t_errcode	allocate_objects(t_args args, t_objects *objs)
 {
+	debug_print(args, "allocating objects");
 	objs->coders = malloc(sizeof(t_coder) * args.noc);
 	if (!objs->coders)
 		return (MALLOC_ERROR);
 	objs->dongles = malloc(sizeof(t_dongle) * args.noc);
 	if (!objs->dongles)
 		return (MALLOC_ERROR);
+	debug_print(args, "objects sucessfully allocated");
 	return (NO_ERROR);
 }
 
-extern void	destroy_objects(t_objects *objs)
+extern void	destroy_objects(t_args args, t_objects *objs)
 {
 	free(objs->coders);
 	free(objs->dongles);
+	debug_print(args, "objects freed");
 	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:22:50 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 22:39:07 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 15:59:56 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,6 @@ int	main(int ac, char **av)
 		debug_args(args);
 		errcode = handle_session(&args, &session);
 	}
-	destroy_objects(&session.objects);
+	destroy_objects(args, &session.objects);
 	return (error_message(errcode));
 }
