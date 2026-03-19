@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 17:40:19 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 01:35:04 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 04:04:32 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ static t_status	routine(t_coder *coder, t_args *args, t_session *session)
 {
 	size_t_thread_set(
 		&coder->last_compile_mutex, &coder->last_compile, current_time_ms());
-	if (log_activity(session->start_ms, "is compiling", coder, args->ttc) == OVER)
+	if (log_activity(
+			session->start_ms, "is compiling", coder, args->ttc) == OVER)
 		return (OVER);
 	pthread_mutex_lock(&session->dongles_mutex);
 	coder->left->last_use = current_time_ms();
@@ -93,10 +94,10 @@ static t_status	routine(t_coder *coder, t_args *args, t_session *session)
 	pthread_cond_broadcast(&session->dongles_cond);
 	pthread_mutex_unlock(&session->dongles_mutex);
 	if (log_activity(
-		session->start_ms, "is debugging", coder, args->ttd) == OVER)
+			session->start_ms, "is debugging", coder, args->ttd) == OVER)
 		return (OVER);
 	if (log_activity(
-		session->start_ms, "is refactoring", coder, args->ttr) == OVER)
+			session->start_ms, "is refactoring", coder, args->ttr) == OVER)
 		return (OVER);
 	return (WORKING);
 }
