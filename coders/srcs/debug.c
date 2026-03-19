@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 11:58:44 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 19:39:33 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 20:22:48 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ extern void	debug_priority(
 	pthread_mutex_lock(&coder->session->print_mutex);
 	printf("[DEBUG PRIORITY]\n");
 	printf(
-		"winner [%zu] request [%zu] deadline [%zu] | "
-		"left [%zu] request [%zu] deadline [%zu] | "
+		"winner [%zu] request [%zu] deadline [%zu]\n"
+		"left [%zu] request [%zu] deadline [%zu]\n"
 		"right [%zu] request [%zu] deadline [%zu]\n",
 		coder->id, coder->request_seq, last[0] + args.ttb,
 		other_left->id, other_left->request_seq, last[1] + args.ttb,
