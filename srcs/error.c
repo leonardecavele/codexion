@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 13:01:36 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 17:34:38 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 12:13:38 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ static void	usage(void)
 		"  time_to_refactor            time refactoring (ms)\n"
 		"  number_of_compiles_required number of compiles required\n"
 		"  dongle_cooldown             dongle cooldown (ms)\n"
-		"  scheduler                   FIFO|EDF\n"
-		"  [debug|DEBUG]               enable extra debug logs\n"
+		"  scheduler                   fifo|edf\n"
+		"  [debug]                     enable extra debug logs\n"
 		);
 }
 

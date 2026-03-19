@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 18:15:59 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 12:11:09 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 12:24:05 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ extern void	log_burnout(size_t start_ms, t_coder *coder)
 	session = coder->session;
 	pthread_mutex_lock(&session->print_mutex);
 	pthread_mutex_lock(&session->over_mutex);
-	if (!session->over)
+	if (session->over == false)
 	{
 		session->over = true;
 		printf("%zu %zu burned out\n", elapsed_time_ms(start_ms), coder->id);
