@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:23:36 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/18 17:24:54 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 14:06:32 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef enum e_errcodes
 	INVALID_ARG_ERROR,
 	ZERO_CODERS_ERROR,
 	THREAD_CREATE_ERROR,
+	MUTEX_INIT_ERROR,
 }	t_errcodes;
 
 t_errcode	error_message(t_errcode errcode);

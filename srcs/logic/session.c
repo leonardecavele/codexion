@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 12:45:00 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/19 14:07:47 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,12 @@ extern t_errcode	handle_session(t_args *args, t_session *session)
 {
 	t_errcode	errcode;
 
-	pthread_mutex_init(&session->print_mutex, NULL);
-	pthread_mutex_init(&session->dongles_mutex, NULL);
-	pthread_mutex_init(&session->over_mutex, NULL);
-	pthread_mutex_init(&session->ready_mutex, NULL);
-	pthread_cond_init(&session->dongles_cond, NULL);
+	if (pthread_mutex_init(&session->print_mutex, NULL) != 0
+		|| pthread_mutex_init(&session->dongles_mutex, NULL) != 0
+		|| pthread_mutex_init(&session->over_mutex, NULL) != 0
+		|| pthread_mutex_init(&session->ready_mutex, NULL) != 0
+		|| pthread_cond_init(&session->dongles_cond, NULL) != 0)
+		return (MUTEX_INIT_ERROR);
 	errcode = set_up_session(args, session, &session->objects);
 	if (errcode == NO_ERROR)
 	{
