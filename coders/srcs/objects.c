@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:09:00 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/20 01:02:36 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/20 01:27:51 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,15 @@
 #include "session.h"
 #include "debug.h"
 #include "mutex.h"
+
+static void	destroy_coder_mutexes(t_objects *objs, size_t n)
+{
+	while (n-- > 0)
+	{
+		pthread_mutex_destroy(&objs->coders[n].over_mutex);
+		pthread_mutex_destroy(&objs->coders[n].last_compile_mutex);
+	}
+}
 
 static void	set_up_object(
 	t_args *args, t_objects *objs, t_session *session, size_t i
@@ -55,7 +64,10 @@ extern t_errcode	set_up_objects(
 		mutexes[0] = &objs->coders[i].over_mutex;
 		mutexes[1] = &objs->coders[i].last_compile_mutex;
 		if (init_mutexes(mutexes, 2) != NO_ERROR)
+		{
+			destroy_coder_mutexes(objs, i);
 			return (MUTEX_INIT_ERROR);
+		}
 	}
 	return (NO_ERROR);
 }
