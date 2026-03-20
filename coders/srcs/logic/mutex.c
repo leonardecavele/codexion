@@ -6,16 +6,26 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 00:56:26 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/20 01:27:54 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/20 03:00:45 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
 #include <stddef.h>
 
+#include "objects.h"
 #include "error.h"
 
-static void	destroy_mutexes(pthread_mutex_t **mutexes, size_t n)
+extern void	destroy_coder_mutexes(t_objects *objs, size_t n)
+{
+	while (n-- > 0)
+	{
+		pthread_mutex_destroy(&objs->coders[n].over_mutex);
+		pthread_mutex_destroy(&objs->coders[n].last_compile_mutex);
+	}
+}
+
+extern void	destroy_mutexes(pthread_mutex_t **mutexes, size_t n)
 {
 	while (n-- > 0)
 		pthread_mutex_destroy(mutexes[n]);

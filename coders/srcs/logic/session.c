@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/20 00:58:25 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/20 03:02:01 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,7 @@ static void	wait_session(size_t n_threads, t_session *session)
 	i = -1;
 	while (++i < n_threads)
 		pthread_join(session->objects.coders[i].thread, NULL);
-	i = -1;
 	pthread_join(session->monitor, NULL);
-	while (++i < n_threads)
-	{
-		pthread_mutex_destroy(&session->objects.coders[i].last_compile_mutex);
-		pthread_mutex_destroy(&session->objects.coders[i].over_mutex);
-	}
 	pthread_mutex_destroy(&session->print_mutex);
 	pthread_mutex_destroy(&session->queue_mutex);
 	pthread_mutex_destroy(&session->dongles_mutex);
@@ -98,7 +92,10 @@ extern t_errcode	handle_session(t_args *args, t_session *session)
 	if (init_mutexes(mutexes, 5) != NO_ERROR)
 		return (MUTEX_INIT_ERROR);
 	if (pthread_cond_init(&session->dongles_cond, NULL) != 0)
+	{
+		destroy_mutexes(mutexes, 5);
 		return (COND_INIT_ERROR);
+	}
 	debug_print(*args, "setting up session");
 	errcode = set_up_session(args, session, &session->objects);
 	if (errcode == NO_ERROR)
@@ -106,5 +103,6 @@ extern t_errcode	handle_session(t_args *args, t_session *session)
 		start_session(args, session);
 		wait_session(args->noc, session);
 	}
+	destroy_coder_mutexes(&session->objects, args->noc);
 	return (errcode);
 }
