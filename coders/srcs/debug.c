@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 11:58:44 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/20 02:32:49 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/20 13:37:56 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ extern void	debug_ids(t_args args, t_objects objects)
 
 	if (!args.debug)
 		return ;
-	printf("[DEBUG IDS]\n");
+	fprintf(stderr, "[DEBUG IDS]\n");
 	i = -1;
 	while (++i < args.noc)
 	{
-		printf(
+		fprintf(stderr,
 			"coder id [%zu], left dongle id [%zu], right dongle id [%zu]\n",
 			objects.coders[i].id, objects.coders[i].left->id,
 			objects.coders[i].right->id
@@ -39,8 +39,8 @@ extern void	debug_print(t_args args, const char *s)
 {
 	if (!args.debug)
 		return ;
-	printf("[DEBUG LOG]\n");
-	printf("%s\n", s);
+	fprintf(stderr, "[DEBUG LOG]\n");
+	fprintf(stderr, "%s\n", s);
 }
 
 extern void	debug_priority(
@@ -61,8 +61,9 @@ extern void	debug_priority(
 	last[2] = other_right->last_compile;
 	pthread_mutex_unlock(&other_right->last_compile_mutex);
 	pthread_mutex_lock(&coder->session->print_mutex);
-	printf("[DEBUG PRIORITY]\n");
-	printf(
+	fprintf(stderr, "[DEBUG PRIORITY]\n");
+	fprintf(
+		stderr,
 		"winner [%zu] request [%zu] deadline [%zu]\n"
 		"left [%zu] request [%zu] deadline [%zu]\n"
 		"right [%zu] request [%zu] deadline [%zu]\n",
@@ -77,16 +78,16 @@ extern void	debug_args(t_args args)
 {
 	if (!args.debug)
 		return ;
-	printf("[DEBUG ARGS]\n");
-	printf("number of coders [%zu]\n", args.noc);
-	printf("time to burnout [%zu]\n", args.ttb);
-	printf("time to compile [%zu]\n", args.ttc);
-	printf("time to debug [%zu]\n", args.ttd);
-	printf("time to refactor [%zu]\n", args.ttr);
-	printf("number of compiles required [%zu]\n", args.nocr);
-	printf("dongle cooldown [%zu]\n", args.dc);
+	fprintf(stderr, "[DEBUG ARGS]\n");
+	fprintf(stderr, "number of coders [%zu]\n", args.noc);
+	fprintf(stderr, "time to burnout [%zu]\n", args.ttb);
+	fprintf(stderr, "time to compile [%zu]\n", args.ttc);
+	fprintf(stderr, "time to debug [%zu]\n", args.ttd);
+	fprintf(stderr, "time to refactor [%zu]\n", args.ttr);
+	fprintf(stderr, "number of compiles required [%zu]\n", args.nocr);
+	fprintf(stderr, "dongle cooldown [%zu]\n", args.dc);
 	if (args.scheduler == FIFO)
-		printf("scheduler [fifo]\n");
+		fprintf(stderr, "scheduler [fifo]\n");
 	else
-		printf("scheduler [edf]\n");
+		fprintf(stderr, "scheduler [edf]\n");
 }
