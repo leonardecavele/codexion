@@ -13,7 +13,7 @@ deadline, the coder burns out and the program terminates.
 
 To build the program :
 ```bash
-make | make install
+make | make all
 ```
 
 To delete the build directory :
