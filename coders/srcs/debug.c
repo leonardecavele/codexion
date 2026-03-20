@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 11:58:44 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 20:22:48 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/20 02:32:49 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ extern void	debug_args(t_args args)
 	printf("number of compiles required [%zu]\n", args.nocr);
 	printf("dongle cooldown [%zu]\n", args.dc);
 	if (args.scheduler == FIFO)
-		printf("scheduler [FIFO]\n");
+		printf("scheduler [fifo]\n");
 	else
-		printf("scheduler [EDF]\n");
+		printf("scheduler [edf]\n");
 }
