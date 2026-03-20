@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/20 00:45:01 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/20 00:58:25 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include "monitor.h"
 #include "threads.h"
 #include "debug.h"
+#include "mutex.h"
 
 static void	wait_session(size_t n_threads, t_session *session)
 {
@@ -85,14 +86,16 @@ static t_errcode	set_up_session(
 
 extern t_errcode	handle_session(t_args *args, t_session *session)
 {
-	t_errcode	errcode;
+	t_errcode		errcode;
+	pthread_mutex_t	*mutexes[5];
 
 	debug_print(*args, "initiating mutexes");
-	if (pthread_mutex_init(&session->print_mutex, NULL) != 0
-		|| pthread_mutex_init(&session->dongles_mutex, NULL) != 0
-		|| pthread_mutex_init(&session->over_mutex, NULL) != 0
-		|| pthread_mutex_init(&session->ready_mutex, NULL) != 0
-		|| pthread_mutex_init(&session->queue_mutex, NULL) != 0)
+	mutexes[0] = &session->print_mutex;
+	mutexes[1] = &session->dongles_mutex;
+	mutexes[2] = &session->over_mutex;
+	mutexes[3] = &session->ready_mutex;
+	mutexes[4] = &session->queue_mutex;
+	if (init_mutexes(mutexes, 5) != NO_ERROR)
 		return (MUTEX_INIT_ERROR);
 	if (pthread_cond_init(&session->dongles_cond, NULL) != 0)
 		return (COND_INIT_ERROR);

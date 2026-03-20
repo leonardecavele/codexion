@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:04:22 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 16:00:12 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/20 01:02:59 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct s_objects
 	t_dongle	*dongles;
 }	t_objects;
 
-void		set_up_objects(t_args *args, t_objects *objs, t_session *session);
+t_errcode	set_up_objects(t_args *args, t_objects *objs, t_session *session);
 t_errcode	allocate_objects(t_args args, t_objects *objs);
 void		destroy_objects(t_args args, t_objects *objs);
 
