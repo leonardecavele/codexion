@@ -79,7 +79,7 @@ whether a coder has burned out or whether the simulation must stop, while coder 
 The links below helped me understand multithreading. AI helped with debugging and testing.
 
 [Low Level: How does a Mutex even work?](https://youtu.be/1tZhmTnk-vc?si=N88K6muGCg-Qpk8h)  
-[Portfolio Courses: Introduction To Threads](https://youtu.be/ldJ8WGZVXZk?si=VvE5k_M5YjynfirD)
-[Wikipedia: Thread (computing)](https://en.wikipedia.org/wiki/Thread_(computing)#Single-threaded_vs_multithreaded_programs)
-[Wikipedia: Deadlock (computer science)](https://en.wikipedia.org/wiki/Deadlock_(computer_science))
+[Portfolio Courses: Introduction To Threads](https://youtu.be/ldJ8WGZVXZk?si=VvE5k_M5YjynfirD)  
+[Wikipedia: Thread (computing)](https://en.wikipedia.org/wiki/Thread_(computing)#Single-threaded_vs_multithreaded_programs)  
+[Wikipedia: Deadlock (computer science)](https://en.wikipedia.org/wiki/Deadlock_(computer_science))  
 [Chatgpt](https://chatgpt.com)  
