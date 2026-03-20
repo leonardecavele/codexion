@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:23:36 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/20 00:45:11 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/20 10:50:49 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ typedef enum e_errcodes
 	MALLOC_ERROR,
 	ARG_COUNT_ERROR,
 	INVALID_ARG_ERROR,
-	ZERO_CODERS_ERROR,
 	THREAD_CREATE_ERROR,
 	MUTEX_INIT_ERROR,
 	COND_INIT_ERROR,

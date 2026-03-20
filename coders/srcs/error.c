@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 13:01:36 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/20 02:33:50 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/20 10:50:42 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ extern t_errcode	error_message(t_errcode errcode)
 		usage();
 	else if (errcode == INVALID_ARG_ERROR)
 		usage();
-	else if (errcode == ZERO_CODERS_ERROR)
-		fprintf(stderr, "invalid number of coders: (can't process 0 coder)\n");
 	else if (errcode == THREAD_CREATE_ERROR)
 		fprintf(stderr, "cannot create thread, pthread_create failed\n");
 	else if (errcode == MUTEX_INIT_ERROR)
