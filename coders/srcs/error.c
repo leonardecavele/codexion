@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 13:01:36 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/20 00:45:23 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/03/20 02:33:50 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ extern t_errcode	error_message(t_errcode errcode)
 	else if (errcode == ZERO_CODERS_ERROR)
 		fprintf(stderr, "invalid number of coders: (can't process 0 coder)\n");
 	else if (errcode == THREAD_CREATE_ERROR)
-		fprintf(stderr, "cannot create thread, phtread_create failed\n");
+		fprintf(stderr, "cannot create thread, pthread_create failed\n");
 	else if (errcode == MUTEX_INIT_ERROR)
 		fprintf(stderr, "cannot init mutex, pthread_mutex_init failed\n");
 	else if (errcode == COND_INIT_ERROR)
-		fprintf(stderr, "cannot init mutex, pthread_cond_init failed\n");
+		fprintf(stderr, "cannot init condition, pthread_cond_init failed\n");
 	return (errcode);
 }
