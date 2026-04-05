@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 17:40:19 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 19:23:24 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/04/05 20:59:47 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ extern void	*handle_coder(void *arg)
 	coder = (t_coder *)arg;
 	if (wait_session_start(coder->session) == OVER)
 		return (NULL);
+	usleep(coder->id * 1000);
 	i = -1;
 	status = WORKING;
 	while (++i < coder->args->nocr)
