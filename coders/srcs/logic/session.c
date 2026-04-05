@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:12:43 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/20 03:02:01 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/04/05 19:59:01 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ static void	wait_session(size_t n_threads, t_session *session)
 		pthread_join(session->objects.coders[i].thread, NULL);
 	pthread_join(session->monitor, NULL);
 	pthread_mutex_destroy(&session->print_mutex);
-	pthread_mutex_destroy(&session->queue_mutex);
-	pthread_mutex_destroy(&session->dongles_mutex);
+	pthread_mutex_destroy(&session->next_ticket_mutex);
 	pthread_mutex_destroy(&session->over_mutex);
-	pthread_mutex_destroy(&session->ready_mutex);
-	pthread_cond_destroy(&session->dongles_cond);
+	pthread_mutex_destroy(&session->start_mutex);
+	pthread_cond_destroy(&session->start_cond);
+	pthread_cond_destroy(&session->over_cond);
 	debug_print(*session->args, "session ended");
 }
 
@@ -44,12 +44,15 @@ static void	start_session(t_args *args, t_session *session)
 {
 	size_t	i;
 
+	pthread_mutex_lock(&session->start_mutex);
 	session->start_ms = current_time_ms();
 	i = -1;
 	while (++i < args->noc)
 		session->objects.coders[i].last_compile = session->start_ms;
 	debug_print(*args, "starting session");
-	bool_thread_set(&session->ready_mutex, &session->ready, true);
+	session->ready = true;
+	pthread_cond_broadcast(&session->start_cond);
+	pthread_mutex_unlock(&session->start_mutex);
 }
 
 static t_errcode	set_up_session(
@@ -81,19 +84,21 @@ static t_errcode	set_up_session(
 extern t_errcode	handle_session(t_args *args, t_session *session)
 {
 	t_errcode		errcode;
-	pthread_mutex_t	*mutexes[5];
+	pthread_mutex_t	*mutexes[4];
 
 	debug_print(*args, "initiating mutexes");
 	mutexes[0] = &session->print_mutex;
-	mutexes[1] = &session->dongles_mutex;
+	mutexes[1] = &session->next_ticket_mutex;
 	mutexes[2] = &session->over_mutex;
-	mutexes[3] = &session->ready_mutex;
-	mutexes[4] = &session->queue_mutex;
-	if (init_mutexes(mutexes, 5) != NO_ERROR)
+	mutexes[3] = &session->start_mutex;
+	if (init_mutexes(mutexes, 4) != NO_ERROR)
 		return (MUTEX_INIT_ERROR);
-	if (pthread_cond_init(&session->dongles_cond, NULL) != 0)
+	if (
+		pthread_cond_init(&session->start_cond, NULL) != 0
+		|| pthread_cond_init(&session->over_cond, NULL) != 0
+	)
 	{
-		destroy_mutexes(mutexes, 5);
+		destroy_mutexes(mutexes, 4);
 		return (COND_INIT_ERROR);
 	}
 	debug_print(*args, "setting up session");

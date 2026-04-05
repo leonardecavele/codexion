@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:09:00 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/20 02:59:17 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/04/05 11:39:31 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	set_up_object(
 	objs->coders[i].session = session;
 	objs->coders[i].over = false;
 	objs->coders[i].waiting = false;
-	objs->coders[i].request_seq = 0;
+	objs->coders[i].ticket = 0;
 	objs->coders[i].last_compile = 0;
 }
 
@@ -44,7 +44,7 @@ extern t_errcode	set_up_objects(
 	t_args *args, t_objects *objs, t_session *session
 )
 {
-	pthread_mutex_t	*mutexes[2];
+	pthread_mutex_t	*mutexes[5];
 	size_t			i;
 
 	debug_print(*args, "setting up objects");
@@ -54,7 +54,15 @@ extern t_errcode	set_up_objects(
 		set_up_object(args, objs, session, i);
 		mutexes[0] = &objs->coders[i].over_mutex;
 		mutexes[1] = &objs->coders[i].last_compile_mutex;
-		if (init_mutexes(mutexes, 2) != NO_ERROR)
+		mutexes[2] = &objs->coders[i].waiting_mutex;
+		mutexes[3] = &objs->coders[i].ticket_mutex;
+		mutexes[4] = &objs->dongles[i].mutex;
+		if (pthread_cond_init(&objs->dongles[i].cond, NULL) != 0)
+		{
+			destroy_coder_mutexes(objs, i);
+			return (COND_INIT_ERROR);
+		}
+		if (init_mutexes(mutexes, 5) != NO_ERROR)
 		{
 			destroy_coder_mutexes(objs, i);
 			return (MUTEX_INIT_ERROR);

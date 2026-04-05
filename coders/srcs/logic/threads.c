@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 19:12:35 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/20 00:58:29 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/04/05 20:04:57 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,11 @@ extern void	size_t_thread_set(pthread_mutex_t *mutex, size_t *dst, size_t v)
 
 extern t_status	wait_session_start(t_session *session)
 {
-	while (1)
-	{
-		if (!bool_thread_cmp(&session->ready_mutex, &session->ready, true))
-			return (WORKING);
-		if (!bool_thread_cmp(&session->over_mutex, &session->over, true))
-			return (OVER);
-		usleep(100);
-	}
+	pthread_mutex_lock(&session->start_mutex);
+	while (!session->ready)
+		pthread_cond_wait(&session->start_cond, &session->start_mutex);
+	pthread_mutex_unlock(&session->start_mutex);
+	if (!bool_thread_cmp(&session->over_mutex, &session->over, true))
+		return (OVER);
+	return (WORKING);
 }

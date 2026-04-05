@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 13:22:50 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/20 10:50:33 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/04/05 11:33:21 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	main(int ac, char **av)
 	t_session	session;
 	t_args		args;
 
-	session = (t_session){.next_request_seq = 1};
+	session = (t_session){.next_ticket = 1};
 	args = (t_args){0};
 	errcode = parse_args(ac - 1, av + 1, &args);
 	if (errcode != NO_ERROR)

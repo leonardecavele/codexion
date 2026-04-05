@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 17:40:19 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 19:23:24 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/04/05 11:26:21 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,58 +23,62 @@
 #include "threads.h"
 #include "queue.h"
 
-static bool	dongles_cooled_down(t_coder *coder)
+static t_dongle *pick_target_dongle(t_coder *coder)
 {
-	if (elapsed_time_ms(coder->left->last_use) < coder->args->dc)
-		return (false);
-	if (elapsed_time_ms(coder->right->last_use) < coder->args->dc)
-		return (false);
-	return (true);
+	t_dongle *target;
+
+	target = coder->right;
+	if (coder->id % 2 == 0)
+		target = coder->left;
+	return (target);
 }
 
 static t_status	try_take_dongles(
-	t_coder *coder, t_session *session, bool *taken
+	t_coder *coder, t_session *session, t_dongle *target
 )
 {
-	pthread_mutex_lock(&session->dongles_mutex);
 	queue_enter(session, coder);
-	if (!bool_thread_cmp(&session->over_mutex, &session->over, true))
+	while (1)
 	{
-		queue_leave(session, coder);
-		pthread_mutex_unlock(&session->dongles_mutex);
-		return (OVER);
+		if (queue_can_take(session, coder))
+		{
+			coder->left->available = false;
+			coder->right->available = false;
+			queue_leave(coder);
+			break ;
+		}
+		pthread_mutex_lock(&target->mutex);
+		while (!target->available)
+			pthread_cond_wait(&target->cond, &target->mutex);
+		pthread_mutex_unlock(&target->mutex);
+		if (!bool_thread_cmp(&session->over_mutex, &session->over, true))
+		{
+			queue_leave(coder);
+			return (OVER);
+		}
 	}
-	if (!coder->left->available || !coder->right->available)
-		pthread_cond_wait(&session->dongles_cond, &session->dongles_mutex);
-	else if (!dongles_cooled_down(coder))
-	{
-		pthread_mutex_unlock(&session->dongles_mutex);
-		usleep(100);
-		return (WORKING);
-	}
-	else if (queue_can_take(session, coder))
-	{
-		coder->left->available = false;
-		coder->right->available = false;
-		queue_leave(session, coder);
-		*taken = true;
-	}
-	pthread_mutex_unlock(&session->dongles_mutex);
 	return (WORKING);
 }
 
 static t_status	take_dongles(t_coder *coder, t_session *session)
 {
-	bool	taken;
+	t_dongle	*target;
 
-	taken = false;
-	while (!taken)
-		if (try_take_dongles(coder, session, &taken) == OVER)
-			return (OVER);
-	if (log_activity(session->start_ms, "has taken a dongle", coder, 0) == OVER)
+	target = pick_target_dongle(coder);
+	if (try_take_dongles(coder, session, target) == OVER)
 		return (OVER);
 	if (log_activity(session->start_ms, "has taken a dongle", coder, 0) == OVER)
+	{
+		pthread_mutex_unlock(&coder->left->mutex);
+		pthread_mutex_unlock(&coder->right->mutex);
 		return (OVER);
+	}
+	if (log_activity(session->start_ms, "has taken a dongle", coder, 0) == OVER)
+	{
+		pthread_mutex_unlock(&coder->left->mutex);
+		pthread_mutex_unlock(&coder->right->mutex);
+		return (OVER);
+	}
 	return (WORKING);
 }
 
@@ -84,14 +88,19 @@ static t_status	routine(t_coder *coder, t_args *args, t_session *session)
 		&coder->last_compile_mutex, &coder->last_compile, current_time_ms());
 	if (log_activity(
 			session->start_ms, "is compiling", coder, args->ttc) == OVER)
+	{
+		pthread_mutex_unlock(&coder->left->mutex);
+		pthread_mutex_unlock(&coder->right->mutex);
 		return (OVER);
-	pthread_mutex_lock(&session->dongles_mutex);
+	}
 	coder->left->last_use = current_time_ms();
 	coder->right->last_use = current_time_ms();
 	coder->left->available = true;
 	coder->right->available = true;
-	pthread_cond_broadcast(&session->dongles_cond);
-	pthread_mutex_unlock(&session->dongles_mutex);
+	pthread_cond_broadcast(&coder->left->cond);
+	pthread_cond_broadcast(&coder->right->cond);
+	pthread_mutex_unlock(&coder->left->mutex);
+	pthread_mutex_unlock(&coder->right->mutex);
 	if (log_activity(
 			session->start_ms, "is debugging", coder, args->ttd) == OVER)
 		return (OVER);

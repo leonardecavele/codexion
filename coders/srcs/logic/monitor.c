@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 13:15:46 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 12:24:27 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/04/05 12:38:02 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ extern void	*handle_monitor(void *arg)
 {
 	t_session	*session;
 	ssize_t		burnout_index;
+	size_t		i;
 
 	session = (t_session *)arg;
 	if (wait_session_start(session) == OVER)
@@ -74,9 +75,10 @@ extern void	*handle_monitor(void *arg)
 		if (check_over(&session->objects, session->args) || burnout_index >= 0)
 		{
 			bool_thread_set(&session->over_mutex, &session->over, true);
-			pthread_mutex_lock(&session->dongles_mutex);
-			pthread_cond_broadcast(&session->dongles_cond);
-			pthread_mutex_unlock(&session->dongles_mutex);
+			i = -1;
+			while (++i < session->args->noc)
+				pthread_cond_broadcast(&session->objects.dongles[i].cond);
+			pthread_cond_broadcast(&session->over_cond);
 			return (NULL);
 		}
 		usleep(100);

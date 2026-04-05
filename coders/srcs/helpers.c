@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 18:15:59 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/19 12:24:05 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/04/05 20:06:41 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <errno.h>
 
 #include "objects.h"
 #include "session.h"
@@ -49,33 +50,27 @@ extern void	log_burnout(size_t start_ms, t_coder *coder)
 	pthread_mutex_unlock(&session->print_mutex);
 }
 
-static t_status	vigilant_sleep(t_session *session, size_t time_to_wait)
+static struct timespec	get_deadline_ms(size_t delay_ms)
 {
-	size_t	end_ms;
-	size_t	now_ms;
-	size_t	remaining_ms;
+	struct timespec	deadline;
 
-	end_ms = current_time_ms() + time_to_wait;
-	while (1)
+	clock_gettime(CLOCK_REALTIME, &deadline);
+	deadline.tv_sec += delay_ms / 1000;
+	deadline.tv_nsec += (long)(delay_ms % 1000) * 1000000L;
+	if (deadline.tv_nsec >= 1000000000L)
 	{
-		if (!bool_thread_cmp(&session->over_mutex, &session->over, true))
-			return (OVER);
-		now_ms = current_time_ms();
-		if (now_ms >= end_ms)
-			break ;
-		remaining_ms = end_ms - now_ms;
-		if (remaining_ms > 1)
-			remaining_ms = 1;
-		usleep(remaining_ms * 1000);
+		deadline.tv_sec += 1;
+		deadline.tv_nsec -= 1000000000L;
 	}
-	return (WORKING);
+	return (deadline);
 }
 
 extern t_status	log_activity(
 	size_t start_ms, char *activity, t_coder *coder, size_t time_to_wait
 )
 {
-	t_session	*session;
+	t_session			*session;
+	struct timespec		deadline;
 
 	session = coder->session;
 	pthread_mutex_lock(&session->print_mutex);
@@ -85,6 +80,18 @@ extern t_status	log_activity(
 		return (OVER);
 	}
 	printf("%zu %zu %s\n", elapsed_time_ms(start_ms), coder->id, activity);
+	deadline = get_deadline_ms(time_to_wait);
 	pthread_mutex_unlock(&session->print_mutex);
-	return (vigilant_sleep(session, time_to_wait));
+	pthread_mutex_lock(&session->over_mutex);
+	if (
+		pthread_cond_timedwait(
+			&session->over_cond, &session->over_mutex, &deadline
+		) == ETIMEDOUT
+	)
+	{
+		pthread_mutex_unlock(&session->over_mutex);
+		return (WORKING);
+	}
+	pthread_mutex_unlock(&session->over_mutex);
+	return (OVER);
 }

@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 11:58:44 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/20 13:37:56 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/04/05 11:29:19 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,12 @@ extern void	debug_priority(
 	fprintf(stderr, "[DEBUG PRIORITY]\n");
 	fprintf(
 		stderr,
-		"winner [%zu] request [%zu] deadline [%zu]\n"
-		"left [%zu] request [%zu] deadline [%zu]\n"
-		"right [%zu] request [%zu] deadline [%zu]\n",
-		coder->id, coder->request_seq, last[0] + args.ttb,
-		other_left->id, other_left->request_seq, last[1] + args.ttb,
-		other_right->id, other_right->request_seq, last[2] + args.ttb
+		"winner [%zu] ticket [%zu] deadline [%zu]\n"
+		"left [%zu] ticket [%zu] deadline [%zu]\n"
+		"right [%zu] ticket [%zu] deadline [%zu]\n",
+		coder->id, coder->ticket, last[0] + args.ttb,
+		other_left->id, other_left->ticket, last[1] + args.ttb,
+		other_right->id, other_right->ticket, last[2] + args.ttb
 		);
 	pthread_mutex_unlock(&coder->session->print_mutex);
 }

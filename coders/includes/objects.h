@@ -6,7 +6,7 @@
 /*   By: ldecavel <ldecavel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/13 16:04:22 by ldecavel          #+#    #+#             */
-/*   Updated: 2026/03/20 01:02:59 by ldecavel         ###   ########.fr       */
+/*   Updated: 2026/04/04 11:05:31 by ldecavel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ typedef struct s_dongle
 	size_t			id;
 	size_t			last_use;
 	bool			available;
+	pthread_mutex_t	mutex;
+	pthread_cond_t	cond;
 	t_coder			*heap[2];
 }	t_dongle;
 
@@ -40,8 +42,10 @@ typedef struct s_coder
 	size_t			last_compile;
 	pthread_mutex_t	over_mutex;
 	bool			over;
+	pthread_mutex_t waiting_mutex;
 	bool			waiting;
-	size_t			request_seq;
+	pthread_mutex_t ticket_mutex;
+	size_t			ticket;
 	t_session		*session;
 	t_args			*args;
 }	t_coder;
